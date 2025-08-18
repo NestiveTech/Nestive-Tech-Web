@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freelance Web & Software Services</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        header {
+            padding: 2rem 1rem 1rem 1rem;
+            text-align: center;
+            background: rgba(0,0,0,0.35);
+            backdrop-filter: blur(8px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        nav a {
+            color: #50c9ce;
+            text-decoration: none;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            position: relative;
+            padding: 0.2rem 0.5rem;
+            transition: color 0.2s;
+        }
+        nav a.active, nav a:hover {
+            color: #44e3e0;
+        }
+        nav a.active::after, nav a:hover::after {
+            content: '';
+            display: block;
+            width: 60%;
+            height: 2px;
+            background: #44e3e0;
+            margin: 0.2rem auto 0 auto;
+            border-radius: 2px;
+        }
+        section {
+            min-height: 70vh;
+            padding: 2.5rem 0 2rem 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        /* Home Section */
+        #home h1 {
+            font-size: 2.3rem;
+            color: #50c9ce;
+            margin-bottom: 0.7rem;
+            text-align: center;
+        }
+        .intro {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .service-cards {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .service-card {
+            background: #203a43;
+            flex: 1 1 260px;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 8px 8px 15px #162a30, -8px -8px 15px #2f4d54;
+            transform-style: preserve-3d;
+            transition: transform 0.3s;
+            min-width: 260px;
+            max-width: 310px;
+        }
+        .service-card:hover {
+            transform: rotateY(12deg) rotateX(7deg);
+            box-shadow: 14px 14px 22px #111, -10px -10px 16px #3f6068;
+        }
+        .service-card h2 {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: #44e3e0;
+        }
+        /* Portfolio Section */
+        #portfolio .portfolio-grid {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .portfolio-item {
+            background: #193144;
+            padding: 1.2rem;
+            border-radius: 10px;
+            width: 260px;
+            margin-bottom: 1.5rem;
+            box-shadow: 4px 4px 14px #162a30;
+            transition: transform 0.18s;
+            text-align: center;
+        }
+        .portfolio-item:hover {
+            transform: scale(1.04);
+        }
+        .portfolio-item h3 {
+            color: #44e3e0;
+            font-size: 1.1rem;
+            margin-bottom: 0.7rem;
+        }
+        .portfolio-item p {
+            font-size: 0.98rem;
+            color: #b0d7d8;
+        }
+        /* About Section */
+        #about {
+            background: rgba(32,58,67,0.8);
+            border-radius: 18px;
+            box-shadow: 6px 6px 12px #162a30, -3px -3px 9px #2f4d54;
+            max-width: 750px;
+            margin: 0 auto 2rem auto;
+            padding: 2rem 2rem 1.5rem 2rem;
+        }
+        #about h2 {
+            color: #44e3e0;
+            margin-bottom: 1.1rem;
+            text-align: center;
+        }
+        #about p {
+            font-size: 1.05rem;
+            text-align: center;
+            line-height: 1.6;
+        }
+        /* Contact Section */
+        #contact {
+            text-align: center;
+        }
+        #contact h2 {
+            color: #44e3e0;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+        .form-container {
+            background: #162a30;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: inset 0 0 15px #0f2027;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .contact-form input, .contact-form textarea {
+            padding: 0.8rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .contact-form button {
+            background-color: #50c9ce;
+            border: none;
+            padding: 1rem;
+            font-size: 1.1rem;
+            color: #04292d;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .contact-form button:hover {
+            background-color: #3aa4a9;
+        }
+        .contact-form button:disabled {
+            background-color: #666;
+            cursor: not-allowed;
+        }
+        #googleSignIn {
+            display: block;
+            margin: 1rem auto 2rem auto;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 10px rgba(66, 133, 244, 0.2);
+            transition: all 0.2s;
+        }
+        #googleSignIn:hover {
+            background-color: #357ae8;
+            transform: translateY(-2px);
+        }
+        .user-info {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .user-info.active {
+            display: flex;
+        }
+        .success-message {
+            background: #34a853;
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            display: none;
+        }
+        .error-message {
+            background: #ea4335;
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            display: none;
+        }
+        /* Footer */
+        footer {
+            text-align: center;
+            color: #b1bfc5;
+            padding: 2rem 1rem 1rem 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 3rem;
+        }
+        /* Responsive */
+        @media (max-width: 900px) {
+            .service-cards, #portfolio .portfolio-grid {
+                flex-direction: column;
+                align-items: center;
+            }
+            nav {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+        }
+        @media (max-width: 600px) {
+            header h1, #home h1 {
+                font-size: 1.8rem;
+            }
+            nav a {
+                font-size: 1rem;
+            }
+            .service-card, .portfolio-item { 
+                min-width: 95vw; 
+                max-width: 98vw; 
+            }
+            #about { 
+                padding: 1.2rem 0.6rem; 
+            }
+            .form-container {
+                padding: 1rem;
+                margin: 0 0.5rem;
+            }
+        }
+    </style>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <header>
+        <h1>Freelance Web & Software Services</h1>
+        <nav>
+            <a href="#home" class="active">Home</a>
+            <a href="#portfolio">Portfolio</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <section id="home">
+        <div class="container">
+            <h1>Hi! I'm a Freelance Web & Software Developer</h1>
+            <p class="intro">
+                I build modern and robust web & software solutions for growing businesses. Let's turn your ideas into high-quality apps, stunning websites, & digital experiences that drive results.
+            </p>
+            <div class="service-cards">
+                <div class="service-card">
+                    <h2>🌐 Web Development</h2>
+                    <p>Responsive websites, SPAs, e-commerce platforms, and backend APIs tailored to your vision and business goals.</p>
+                </div>
+                <div class="service-card">
+                    <h2>💻 Software Solutions</h2>
+                    <p>Desktop applications, API integration, automation tools, and scalable business applications.</p>
+                </div>
+                <div class="service-card">
+                    <h2>🎨 UI/UX Design</h2>
+                    <p>User-focused, interactive interfaces designed for maximum engagement and conversion rates.</p>
+                </div>
+                <div class="service-card">
+                    <h2>🚀 Consulting & Support</h2>
+                    <p>Technology consulting, legacy system modernization, and comprehensive long-term technical support.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio">
+        <div class="container">
+            <h2 style="color:#44e3e0; text-align:center; margin-bottom:1.5rem;">Portfolio</h2>
+            <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <h3>Corporate Website</h3>
+                    <p>Responsive business site with CMS, SEO optimization, and analytics integration for effortless content management.</p>
+                </div>
+                <div class="portfolio-item">
+                    <h3>eCommerce Platform</h3>
+                    <p>Full-featured online store with product management, secure payment processing, and comprehensive order tracking.</p>
+                </div>
+                <div class="portfolio-item">
+                    <h3>Inventory Management</h3>
+                    <p>Enterprise-grade system with automation, real-time analytics, QR code support, and multi-location tracking.</p>
+                </div>
+                <div class="portfolio-item">
+                    <h3>Progressive Web App</h3>
+                    <p>Mobile-optimized PWA with offline functionality, push notifications, and seamless user experience.</p>
+                </div>
+                <div class="portfolio-item">
+                    <h3>REST API Development</h3>
+                    <p>Scalable APIs with authentication, rate limiting, comprehensive documentation, and monitoring.</p>
+                </div>
+                <div class="portfolio-item">
+                    <h3>Analytics Dashboard</h3>
+                    <p>Real-time business intelligence platform with interactive charts, filters, and automated reporting.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about">
+        <h2>About Me</h2>
+        <p>
+            I am passionate about technology and helping businesses achieve digital transformation and success.<br><br>
+            With over 5 years of experience in web and software development, I specialize in modern JavaScript frameworks (React, Vue, Node.js), backend development, cloud hosting (AWS, Google Cloud), database design, and user experience optimization. <br><br>
+            My approach is always collaborative, transparent, and focused on delivering solutions that drive measurable business outcomes and long-term growth.
+        </p>
+    </section>
+
+    <section id="contact">
+        <div class="container">
+            <h2>Contact Me</h2>
+            <button id="googleSignIn">🔐 Sign in with Google</button>
+            <div class="user-info" id="userInfo">
+                <img id="userPicture" src="" alt="User">
+                <span id="userName"></span>
+                <button onclick="signOut()" style="background:#ea4335; color:white; border:none; padding:0.5rem 1rem; border-radius:20px; cursor:pointer;">Sign Out</button>
+            </div>
+            
+            <div class="form-container">
+                <h3 style="color: #44e3e0; margin-bottom: 1.5rem;">Get In Touch</h3>
+                <div class="success-message" id="successMessage">Message sent successfully! I'll get back to you soon.</div>
+                <div class="error-message" id="errorMessage">Error sending message. Please try again.</div>
+                <form class="contact-form" id="contactForm">
+                    <input type="text" id="name" placeholder="Your Full Name *" required>
+                    <input type="email" id="email" placeholder="Your Email Address *" required>
+                    <input type="tel" id="phone" placeholder="Phone Number">
+                    <input type="text" id="project" placeholder="Project Type (e.g., Website, App, API)">
+                    <input type="text" id="budget" placeholder="Estimated Budget">
+                    <textarea id="message" placeholder="Tell me about your project, requirements, and timeline..." rows="5" required></textarea>
+                    <button type="submit" id="submitBtn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Freelance Web & Software Services. All rights reserved.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Built with modern web technologies | Secured with Google Authentication</p>
+    </footer>
+
+    <script>
+        // Configuration - REPLACE THESE WITH YOUR ACTUAL VALUES
+        const CONFIG = {
+            googleClientId: '13894732581-6delkc6ura65ndvg1lkh185e3hbuglrd.apps.googleusercontent.com',
+            sheetsApiUrl: 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URLhttps://script.google.com/macros/s/AKfycbwMb0_qNP_lMJg_QK0grYoGUFGI6ZfWzfM_ARoT21639p2R2S3Q9XyAoOBjPJPkK2Ov/exec'
+        };
+
+        let currentUser = null;
+
+        // Navigation scroll & active menu
+        const navLinks = document.querySelectorAll('nav a');
+        window.addEventListener('scroll', () => {
+            let fromTop = window.scrollY + 100;
+            navLinks.forEach(link => {
+                const section = document.querySelector(link.getAttribute('href'));
+                if (
+                    section.offsetTop <= fromTop &&
+                    section.offsetTop + section.offsetHeight > fromTop
+                ) {
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Google Sign-In Setup
+        window.onload = function() {
+            if (CONFIG.googleClientId === 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com') {
+                console.warn('Please replace YOUR_GOOGLE_CLIENT_ID with your actual Google Client ID');
+                return;
+            }
+
+            const googleSignInBtn = document.getElementById('googleSignIn');
+            
+            // Initialize Google Sign-In
+            google.accounts.id.initialize({
+                client_id: CONFIG.googleClientId,
+                callback: handleCredentialResponse
+            });
+
+            googleSignInBtn.addEventListener('click', () => {
+                google.accounts.id.prompt();
+            });
+
+            function handleCredentialResponse(response) {
+                const decoded = parseJwt(response.credential);
+                currentUser = {
+                    name: decoded.name,
+                    email: decoded.email,
+                    picture: decoded.picture,
+                    sub: decoded.sub
+                };
+                
+                // Update UI
+                updateUIAfterLogin(currentUser);
+                
+                // Log user data to Google Sheets
+                logUserToSheets(currentUser);
+            }
+
+            function parseJwt(token) {
+                var base64Url = token.split('.')[1];
+                var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                var jsonPayload = decodeURIComponent(
+                    atob(base64)
+                        .split('')
+                        .map(function (c) {
+                            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                        })
+                        .join('')
+                );
+                return JSON.parse(jsonPayload);
+            }
+        };
+
+        function updateUIAfterLogin(user) {
+            document.getElementById('googleSignIn').style.display = 'none';
+            document.getElementById('userInfo').classList.add('active');
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userPicture').src = user.picture;
+            
+            // Pre-fill form with user data
+            document.getElementById('name').value = user.name;
+            document.getElementById('email').value = user.email;
+        }
+
+        function signOut() {
+            currentUser = null;
+            document.getElementById('googleSignIn').style.display = 'block';
+            document.getElementById('userInfo').classList.remove('active');
+            
+            // Clear form
+            document.getElementById('contactForm').reset();
+        }
+
+        // Function to log user data to Google Sheets
+        async function logUserToSheets(user) {
+            if (CONFIG.sheetsApiUrl === 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL') {
+                console.warn('Please replace YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL with your actual URL');
+                return;
+            }
+
+            const userData = {
+                timestamp: new Date().toISOString(),
+                action: 'Google Sign-In',
+                name: user.name,
+                email: user.email,
+                userId: user.sub,
+                picture: user.picture
+            };
+
+            try {
+                await fetch(CONFIG.sheetsApiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'addUser',
+                        data: userData
+                    })
+                });
+                console.log('User logged to Google Sheets');
+            } catch (error) {
+                console.error('Error logging user:', error);
+            }
+        }
+
+        // Contact form handler with Google Sheets integration
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+            
+            // Reset messages
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+            
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+            
+            const formData = {
+                timestamp: new Date().toISOString(),
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                project: document.getElementById('project').value,
+                budget: document.getElementById('budget').value,
+                message: document.getElementById('message').value,
+                userSignedIn: currentUser ? currentUser.name : 'Not signed in',
+                ipAddress: 'Unknown' // You can implement IP detection if needed
+            };
+
+            try {
+                if (CONFIG.sheetsApiUrl === 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL') {
+                    throw new Error('Google Sheets API URL not configured');
+                }
+
+                const response = await fetch(CONFIG.sheetsApiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'addContact',
+                        data: formData
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    successMsg.style.display = 'block';
+                    this.reset();
+                    
+                    // Re-fill user data if signed in
+                    if (currentUser) {
+                        document.getElementById('name').value = currentUser.name;
+                        document.getElementById('email').value = currentUser.email;
+                    }
+                } else {
+                    throw new Error(result.error || 'Unknown error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                errorMsg.style.display = 'block';
+                errorMsg.textContent = 'Error: ' + error.message + '. Please try again or email me directly.';
+            } finally {
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                targetSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
