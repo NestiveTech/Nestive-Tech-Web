@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Interactive Portfolio</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <title>Contact Form - Google Sheets Integration</title>
     <style>
         * {
             margin: 0;
@@ -15,428 +13,866 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #000;
-            color: white;
-            overflow-x: hidden;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
         }
 
-        /* 3D Canvas */
-        #threejs-canvas {
+        /* Navigation */
+        nav {
             position: fixed;
             top: 0;
-            left: 0;
             width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        /* Floating Navigation */
-        .nav-3d {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
             z-index: 1000;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 50px;
-            padding: 15px 30px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
         }
 
-        .nav-3d a {
-            color: white;
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding: 0 2rem;
+        }
+
+        nav a {
             text-decoration: none;
-            margin: 0 20px;
-            padding: 10px 20px;
+            color: #333;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
             border-radius: 25px;
             transition: all 0.3s ease;
-            position: relative;
         }
 
-        .nav-3d a:hover {
-            background: rgba(68, 227, 224, 0.3);
+        nav a:hover,
+        nav a.active {
+            background: #44e3e0;
+            color: white;
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(68, 227, 224, 0.4);
         }
 
-        /* 3D Sections */
-        .section-3d {
+        /* Sections */
+        .section {
             min-height: 100vh;
+            padding: 100px 0 50px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            position: relative;
-            z-index: 10;
         }
 
-        .content-glass {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 40px;
-            margin: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            max-width: 600px;
-        }
-
-        /* Floating Elements */
-        .floating-element {
-            position: absolute;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-
-        /* Interactive 3D Form */
-        .form-3d {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(30px);
-            border-radius: 25px;
-            padding: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
-        }
-
-        .form-3d input,
-        .form-3d textarea,
-        .form-3d select {
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 15px;
-            color: white;
-            padding: 15px;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
             width: 100%;
-            margin-bottom: 20px;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
         }
 
-        .form-3d input:focus,
-        .form-3d textarea:focus,
-        .form-3d select:focus {
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+        }
+
+        p {
+            text-align: center;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Contact Form */
+        .contact-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-form {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+            box-shadow: 0 0 10px rgba(68, 227, 224, 0.3);
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
             outline: none;
             border-color: #44e3e0;
-            box-shadow: 0 0 20px rgba(68, 227, 224, 0.5);
-            transform: translateZ(10px);
+            box-shadow: 0 0 15px rgba(68, 227, 224, 0.4);
+            transform: translateY(-1px);
         }
 
-        .form-3d input::placeholder,
-        .form-3d textarea::placeholder {
-            color: rgba(255, 255, 255, 0.7);
+        textarea {
+            resize: vertical;
+            min-height: 120px;
         }
 
-        .submit-3d {
-            background: linear-gradient(135deg, #44e3e0, #667eea);
-            border: none;
-            border-radius: 15px;
+        /* Phone Number Styling */
+        .phone-container {
+            display: flex;
+            gap: 5px;
+        }
+
+        .country-code-select {
+            flex: 0 0 auto;
+            min-width: 90px;
+            max-width: 120px;
+        }
+
+        .phone-input {
+            flex: 1;
+        }
+
+        .char-counter {
+            text-align: right;
+            font-size: 0.85rem;
+            color: #b1bfc5;
+            margin-top: 0.25rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #44e3e0 0%, #667eea 100%);
             color: white;
-            padding: 15px 30px;
-            font-size: 16px;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
             font-weight: 600;
+            border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
 
-        .submit-3d:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 15px 35px rgba(68, 227, 224, 0.4);
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(68, 227, 224, 0.4);
         }
 
-        /* Particle Effect */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
         }
 
-        /* 3D Text */
-.text-3d {
-    font-size: 4rem;
-    font-weight: 900;
-    background: linear-gradient(45deg, #44e3e0, #667eea, #764ba2);
-    -webkit-background-clip: text;
-    background-clip: text;  /* Add this line */
-    -webkit-text-fill-color: transparent;
-    text-align: center;
-    text-shadow: 0 0 30px rgba(68, 227, 224, 0.5);
-    transform-style: preserve-3d;
-    animation: textFloat 4s ease-in-out infinite;
-}
+        .loading-spinner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
 
-        @keyframes textFloat {
-            0%, 100% { transform: rotateX(0deg) rotateY(0deg); }
-            25% { transform: rotateX(5deg) rotateY(5deg); }
-            75% { transform: rotateX(-5deg) rotateY(-5deg); }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Messages */
+        .message {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .debug-info {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        /* Hidden iframe for form submission */
+        .hidden-iframe {
+            display: none;
+            width: 0;
+            height: 0;
+            border: none;
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .text-3d {
-                font-size: 2.5rem;
-            }
-            
-            .content-glass {
-                margin: 10px;
-                padding: 20px;
+            .nav-container {
+                gap: 1rem;
+                padding: 0 1rem;
             }
 
-            .nav-3d {
-                padding: 10px 20px;
+            nav a {
+                padding: 0.5rem;
+                font-size: 0.9rem;
             }
 
-            .nav-3d a {
-                margin: 0 10px;
-                padding: 8px 15px;
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            .contact-form {
+                margin: 0 1rem;
+                padding: 1.5rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .phone-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .country-code-select {
+                min-width: 100%;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-container {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .contact-form {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- 3D Canvas Background -->
-    <canvas id="threejs-canvas"></canvas>
-
-    <!-- Floating Navigation -->
-    <nav class="nav-3d">
-        <a href="#home" data-section="home">Home</a>
-        <a href="#about" data-section="about">About</a>
-        <a href="#portfolio" data-section="portfolio">Portfolio</a>
-        <a href="#contact" data-section="contact">Contact</a>
+    <nav>
+        <div class="nav-container">
+            <a href="#home" class="active">Home</a>
+            <a href="#about">About</a>
+            <a href="#services">Services</a>
+            <a href="#contact">Contact</a>
+        </div>
     </nav>
 
-    <!-- Home Section -->
-    <section id="home" class="section-3d">
-        <div class="content-glass">
-            <h1 class="text-3d">Welcome to 3D Web</h1>
-            <p style="text-align: center; font-size: 1.2rem; margin-top: 20px;">
-                Experience the future of web design with immersive 3D interactions
-            </p>
+    <section id="home" class="section">
+        <div class="container">
+            <h1>Welcome</h1>
+            <p>Professional web development services</p>
         </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="section-3d">
-        <div class="content-glass">
-            <h2 style="color: #44e3e0; margin-bottom: 20px;">About Our 3D Experience</h2>
-            <p>This website demonstrates cutting-edge 3D web technologies including Three.js, WebGL, and interactive animations. Navigate through floating elements and experience web design in a new dimension.</p>
+    <section id="about" class="section">
+        <div class="container">
+            <h2>About</h2>
+            <p>Learn more about our services and expertise.</p>
         </div>
     </section>
 
-    <!-- Portfolio Section -->
-    <section id="portfolio" class="section-3d">
-        <div class="content-glass">
-            <h2 style="color: #667eea; margin-bottom: 20px;">3D Portfolio</h2>
-            <div id="portfolio-3d-container" style="height: 300px; width: 100%; position: relative;"></div>
+    <section id="services" class="section">
+        <div class="container">
+            <h2>Services</h2>
+            <p>We offer comprehensive web development solutions.</p>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="section-3d">
-        <div class="content-glass">
-            <h2 style="color: #44e3e0; margin-bottom: 30px; text-align: center;">Contact Us</h2>
-            <form class="form-3d" action="https://script.google.com/macros/s/AKfycby5YooFlJE-YRVxyW86x2m6gi3_tPew4egmALR-OIFOJKgKyGQisT-S9Wt8xbzSfBeafw/exec" method="POST">
-                <input type="hidden" name="action" value="addContact">
-                
-                <input type="text" name="name" placeholder="Your Name" required>
-                <input type="email" name="email" placeholder="Your Email" required>
-                <input type="tel" name="phone" placeholder="Phone Number">
-                
-                <select name="project" required>
-                    <option value="">Select Project Type</option>
-                    <option value="3d-website">3D Website</option>
-                    <option value="vr-experience">VR Experience</option>
-                    <option value="interactive-app">Interactive App</option>
-                    <option value="other">Other</option>
-                </select>
-                
-                <textarea name="message" rows="4" placeholder="Tell us about your 3D project vision..." required></textarea>
-                
-                <button type="submit" class="submit-3d">Send to the 3D Dimension</button>
-            </form>
+    <section id="contact" class="section">
+        <div class="container">
+            <h2>Contact Us</h2>
+            <div class="contact-container">
+                <form id="contactForm" class="contact-form" 
+                      action="https://script.google.com/macros/s/AKfycby5YooFlJE-YRVxyW86x2m6gi3_tPew4egmALR-OIFOJKgKyGQisT-S9Wt8xbzSfBeafw/exec" 
+                      method="POST" 
+                      target="hidden_iframe">
+                    
+                    <input type="hidden" name="action" value="addContact">
+                    
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <div class="phone-container">
+                            <select id="countryCode" name="countryCode" class="country-code-select">
+                                <option value="+1">🇺🇸 +1</option>
+                                <option value="+7">🇷🇺 +7</option>
+                                <option value="+20">🇪🇬 +20</option>
+                                <option value="+27">🇿🇦 +27</option>
+                                <option value="+30">🇬🇷 +30</option>
+                                <option value="+31">🇳🇱 +31</option>
+                                <option value="+32">🇧🇪 +32</option>
+                                <option value="+33">🇫🇷 +33</option>
+                                <option value="+34">🇪🇸 +34</option>
+                                <option value="+36">🇭🇺 +36</option>
+                                <option value="+39">🇮🇹 +39</option>
+                                <option value="+40">🇷🇴 +40</option>
+                                <option value="+41">🇨🇭 +41</option>
+                                <option value="+43">🇦🇹 +43</option>
+                                <option value="+44">🇬🇧 +44</option>
+                                <option value="+45">🇩🇰 +45</option>
+                                <option value="+46">🇸🇪 +46</option>
+                                <option value="+47">🇳🇴 +47</option>
+                                <option value="+48">🇵🇱 +48</option>
+                                <option value="+49">🇩🇪 +49</option>
+                                <option value="+51">🇵🇪 +51</option>
+                                <option value="+52">🇲🇽 +52</option>
+                                <option value="+53">🇨🇺 +53</option>
+                                <option value="+54">🇦🇷 +54</option>
+                                <option value="+55">🇧🇷 +55</option>
+                                <option value="+56">🇨🇱 +56</option>
+                                <option value="+57">🇨🇴 +57</option>
+                                <option value="+58">🇻🇪 +58</option>
+                                <option value="+60">🇲🇾 +60</option>
+                                <option value="+61">🇦🇺 +61</option>
+                                <option value="+62">🇮🇩 +62</option>
+                                <option value="+63">🇵🇭 +63</option>
+                                <option value="+64">🇳🇿 +64</option>
+                                <option value="+65">🇸🇬 +65</option>
+                                <option value="+66">🇹🇭 +66</option>
+                                <option value="+81">🇯🇵 +81</option>
+                                <option value="+82">🇰🇷 +82</option>
+                                <option value="+84">🇻🇳 +84</option>
+                                <option value="+86">🇨🇳 +86</option>
+                                <option value="+90">🇹🇷 +90</option>
+                                <option value="+91" selected>🇮🇳 +91</option>
+                                <option value="+92">🇵🇰 +92</option>
+                                <option value="+93">🇦🇫 +93</option>
+                                <option value="+94">🇱🇰 +94</option>
+                                <option value="+95">🇲🇲 +95</option>
+                                <option value="+98">🇮🇷 +98</option>
+                                <option value="+212">🇲🇦 +212</option>
+                                <option value="+213">🇩🇿 +213</option>
+                                <option value="+216">🇹🇳 +216</option>
+                                <option value="+218">🇱🇾 +218</option>
+                                <option value="+220">🇬🇲 +220</option>
+                                <option value="+221">🇸🇳 +221</option>
+                                <option value="+222">🇲🇷 +222</option>
+                                <option value="+223">🇲🇱 +223</option>
+                                <option value="+224">🇬🇳 +224</option>
+                                <option value="+225">🇨🇮 +225</option>
+                                <option value="+226">🇧🇫 +226</option>
+                                <option value="+227">🇳🇪 +227</option>
+                                <option value="+228">🇹🇬 +228</option>
+                                <option value="+229">🇧🇯 +229</option>
+                                <option value="+230">🇲🇺 +230</option>
+                                <option value="+231">🇱🇷 +231</option>
+                                <option value="+232">🇸🇱 +232</option>
+                                <option value="+233">🇬🇭 +233</option>
+                                <option value="+234">🇳🇬 +234</option>
+                                <option value="+235">🇹🇩 +235</option>
+                                <option value="+236">🇨🇫 +236</option>
+                                <option value="+237">🇨🇲 +237</option>
+                                <option value="+238">🇨🇻 +238</option>
+                                <option value="+239">🇸🇹 +239</option>
+                                <option value="+240">🇬🇶 +240</option>
+                                <option value="+241">🇬🇦 +241</option>
+                                <option value="+242">🇨🇬 +242</option>
+                                <option value="+243">🇨🇩 +243</option>
+                                <option value="+244">🇦🇴 +244</option>
+                                <option value="+245">🇬🇼 +245</option>
+                                <option value="+246">🇮🇴 +246</option>
+                                <option value="+248">🇸🇨 +248</option>
+                                <option value="+249">🇸🇩 +249</option>
+                                <option value="+250">🇷🇼 +250</option>
+                                <option value="+251">🇪🇹 +251</option>
+                                <option value="+252">🇸🇴 +252</option>
+                                <option value="+253">🇩🇯 +253</option>
+                                <option value="+254">🇰🇪 +254</option>
+                                <option value="+255">🇹🇿 +255</option>
+                                <option value="+256">🇺🇬 +256</option>
+                                <option value="+257">🇧🇮 +257</option>
+                                <option value="+258">🇲🇿 +258</option>
+                                <option value="+260">🇿🇲 +260</option>
+                                <option value="+261">🇲🇬 +261</option>
+                                <option value="+262">🇷🇪 +262</option>
+                                <option value="+263">🇿🇼 +263</option>
+                                <option value="+264">🇳🇦 +264</option>
+                                <option value="+265">🇲🇼 +265</option>
+                                <option value="+266">🇱🇸 +266</option>
+                                <option value="+267">🇧🇼 +267</option>
+                                <option value="+268">🇸🇿 +268</option>
+                                <option value="+269">🇰🇲 +269</option>
+                                <option value="+290">🇸🇭 +290</option>
+                                <option value="+291">🇪🇷 +291</option>
+                                <option value="+297">🇦🇼 +297</option>
+                                <option value="+298">🇫🇴 +298</option>
+                                <option value="+299">🇬🇱 +299</option>
+                                <option value="+350">🇬🇮 +350</option>
+                                <option value="+351">🇵🇹 +351</option>
+                                <option value="+352">🇱🇺 +352</option>
+                                <option value="+353">🇮🇪 +353</option>
+                                <option value="+354">🇮🇸 +354</option>
+                                <option value="+355">🇦🇱 +355</option>
+                                <option value="+356">🇲🇹 +356</option>
+                                <option value="+357">🇨🇾 +357</option>
+                                <option value="+358">🇫🇮 +358</option>
+                                <option value="+359">🇧🇬 +359</option>
+                                <option value="+370">🇱🇹 +370</option>
+                                <option value="+371">🇱🇻 +371</option>
+                                <option value="+372">🇪🇪 +372</option>
+                                <option value="+373">🇲🇩 +373</option>
+                                <option value="+374">🇦🇲 +374</option>
+                                <option value="+375">🇧🇾 +375</option>
+                                <option value="+376">🇦🇩 +376</option>
+                                <option value="+377">🇲🇨 +377</option>
+                                <option value="+378">🇸🇲 +378</option>
+                                <option value="+380">🇺🇦 +380</option>
+                                <option value="+381">🇷🇸 +381</option>
+                                <option value="+382">🇲🇪 +382</option>
+                                <option value="+383">🇽🇰 +383</option>
+                                <option value="+385">🇭🇷 +385</option>
+                                <option value="+386">🇸🇮 +386</option>
+                                <option value="+387">🇧🇦 +387</option>
+                                <option value="+389">🇲🇰 +389</option>
+                                <option value="+420">🇨🇿 +420</option>
+                                <option value="+421">🇸🇰 +421</option>
+                                <option value="+423">🇱🇮 +423</option>
+                                <option value="+500">🇫🇰 +500</option>
+                                <option value="+501">🇧🇿 +501</option>
+                                <option value="+502">🇬🇹 +502</option>
+                                <option value="+503">🇸🇻 +503</option>
+                                <option value="+504">🇭🇳 +504</option>
+                                <option value="+505">🇳🇮 +505</option>
+                                <option value="+506">🇨🇷 +506</option>
+                                <option value="+507">🇵🇦 +507</option>
+                                <option value="+508">🇵🇲 +508</option>
+                                <option value="+509">🇭🇹 +509</option>
+                                <option value="+590">🇬🇵 +590</option>
+                                <option value="+591">🇧🇴 +591</option>
+                                <option value="+592">🇬🇾 +592</option>
+                                <option value="+593">🇪🇨 +593</option>
+                                <option value="+594">🇬🇫 +594</option>
+                                <option value="+595">🇵🇾 +595</option>
+                                <option value="+596">🇲🇶 +596</option>
+                                <option value="+597">🇸🇷 +597</option>
+                                <option value="+598">🇺🇾 +598</option>
+                                <option value="+599">🇧🇶 +599</option>
+                                <option value="+670">🇹🇱 +670</option>
+                                <option value="+672">🇦🇶 +672</option>
+                                <option value="+673">🇧🇳 +673</option>
+                                <option value="+674">🇳🇷 +674</option>
+                                <option value="+675">🇵🇬 +675</option>
+                                <option value="+676">🇹🇴 +676</option>
+                                <option value="+677">🇸🇧 +677</option>
+                                <option value="+678">🇻🇺 +678</option>
+                                <option value="+679">🇫🇯 +679</option>
+                                <option value="+680">🇵🇼 +680</option>
+                                <option value="+681">🇼🇫 +681</option>
+                                <option value="+682">🇨🇰 +682</option>
+                                <option value="+683">🇳🇺 +683</option>
+                                <option value="+684">🇦🇸 +684</option>
+                                <option value="+685">🇼🇸 +685</option>
+                                <option value="+686">🇰🇮 +686</option>
+                                <option value="+687">🇳🇨 +687</option>
+                                <option value="+688">🇹🇻 +688</option>
+                                <option value="+689">🇵🇫 +689</option>
+                                <option value="+690">🇹🇰 +690</option>
+                                <option value="+691">🇫🇲 +691</option>
+                                <option value="+692">🇲🇭 +692</option>
+                                <option value="+850">🇰🇵 +850</option>
+                                <option value="+852">🇭🇰 +852</option>
+                                <option value="+853">🇲🇴 +853</option>
+                                <option value="+855">🇰🇭 +855</option>
+                                <option value="+856">🇱🇦 +856</option>
+                                <option value="+880">🇧🇩 +880</option>
+                                <option value="+886">🇹🇼 +886</option>
+                                <option value="+960">🇲🇻 +960</option>
+                                <option value="+961">🇱🇧 +961</option>
+                                <option value="+962">🇯🇴 +962</option>
+                                <option value="+963">🇸🇾 +963</option>
+                                <option value="+964">🇮🇶 +964</option>
+                                <option value="+965">🇰🇼 +965</option>
+                                <option value="+966">🇸🇦 +966</option>
+                                <option value="+967">🇾🇪 +967</option>
+                                <option value="+968">🇴🇲 +968</option>
+                                <option value="+970">🇵🇸 +970</option>
+                                <option value="+971">🇦🇪 +971</option>
+                                <option value="+972">🇮🇱 +972</option>
+                                <option value="+973">🇧🇭 +973</option>
+                                <option value="+974">🇶🇦 +974</option>
+                                <option value="+975">🇧🇹 +975</option>
+                                <option value="+976">🇲🇳 +976</option>
+                                <option value="+977">🇳🇵 +977</option>
+                                <option value="+992">🇹🇯 +992</option>
+                                <option value="+993">🇹🇲 +993</option>
+                                <option value="+994">🇦🇿 +994</option>
+                                <option value="+995">🇬🇪 +995</option>
+                                <option value="+996">🇰🇬 +996</option>
+                                <option value="+998">🇺🇿 +998</option>
+                            </select>
+                            <input type="tel" id="phone" name="phone" class="phone-input" placeholder="Enter phone number" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="project">Project Type</label>
+                        <select id="project" name="project" required>
+                            <option value="">Select project type</option>
+                            <option value="website">Website Development</option>
+                            <option value="ecommerce">E-commerce</option>
+                            <option value="webapp">Web Application</option>
+                            <option value="mobile">Mobile App</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="budget">Budget Range</label>
+                        <select id="budget" name="budget" required>
+                            <option value="">Select budget range</option>
+                            <option value="under-5k">Under $5,000</option>
+                            <option value="5k-10k">$5,000 - $10,000</option>
+                            <option value="10k-25k">$10,000 - $25,000</option>
+                            <option value="25k-50k">$25,000 - $50,000</option>
+                            <option value="over-50k">Over $50,000</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="5" maxlength="1000" required 
+                                  placeholder="Tell us about your project..."></textarea>
+                        <div id="charCounter" class="char-counter">0 / 1000 characters</div>
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="submit-btn">
+                        <span id="buttonText">Send Message</span>
+                        <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                            <div class="spinner"></div>
+                        </div>
+                    </button>
+                </form>
+
+                <div id="successMessage" class="message success-message" style="display: none;">
+                    ✅ Thank you! Your message has been sent successfully. I'll get back to you within 24 hours.
+                </div>
+
+                <div id="errorMessage" class="message error-message" style="display: none;">
+                    ❌ There was an error sending your message. Please try again.
+                </div>
+
+                <div id="debugInfo" class="debug-info" style="display: none;"></div>
+            </div>
         </div>
     </section>
+
+    <!-- Hidden iframe for form submission -->
+    <iframe name="hidden_iframe" id="hidden_iframe" class="hidden-iframe"></iframe>
 
     <script>
-        // Three.js 3D Scene Setup
-        let scene, camera, renderer, geometry, material, mesh;
-        let particles = [];
-
-        function init3D() {
-            // Scene setup
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('threejs-canvas'), alpha: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setClearColor(0x000000, 0.8);
-
-            // Create floating geometric shapes
-            createFloatingShapes();
-            
-            // Create particle system
-            createParticles();
-
-            // Position camera
-            camera.position.z = 5;
-
-            // Animation loop
-            animate();
-        }
-
-        function createFloatingShapes() {
-            // Create multiple floating geometric shapes
-            for (let i = 0; i < 15; i++) {
-                const geometries = [
-                    new THREE.BoxGeometry(0.5, 0.5, 0.5),
-                    new THREE.SphereGeometry(0.3, 16, 16),
-                    new THREE.ConeGeometry(0.3, 0.6, 8),
-                    new THREE.OctahedronGeometry(0.4)
-                ];
-
-                const geometry = geometries[Math.floor(Math.random() * geometries.length)];
-                const material = new THREE.MeshPhongMaterial({
-                    color: new THREE.Color().setHSL(Math.random(), 0.7, 0.6),
-                    transparent: true,
-                    opacity: 0.8
-                });
-
-                const mesh = new THREE.Mesh(geometry, material);
-                
-                // Random position
-                mesh.position.x = (Math.random() - 0.5) * 20;
-                mesh.position.y = (Math.random() - 0.5) * 20;
-                mesh.position.z = (Math.random() - 0.5) * 20;
-                
-                // Random rotation speed
-                mesh.userData = {
-                    rotationSpeed: {
-                        x: (Math.random() - 0.5) * 0.02,
-                        y: (Math.random() - 0.5) * 0.02,
-                        z: (Math.random() - 0.5) * 0.02
-                    }
-                };
-
-                scene.add(mesh);
-                particles.push(mesh);
-            }
-
-            // Add lighting
-            const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
-            scene.add(ambientLight);
-
-            const directionalLight = new THREE.DirectionalLight(0x44e3e0, 1);
-            directionalLight.position.set(5, 5, 5);
-            scene.add(directionalLight);
-
-            const pointLight = new THREE.PointLight(0x667eea, 1, 100);
-            pointLight.position.set(-5, -5, 5);
-            scene.add(pointLight);
-        }
-
-        function createParticles() {
-            const particleGeometry = new THREE.BufferGeometry();
-            const particleCount = 1000;
-            const positions = new Float32Array(particleCount * 3);
-
-            for (let i = 0; i < particleCount * 3; i++) {
-                positions[i] = (Math.random() - 0.5) * 100;
-            }
-
-            particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-            const particleMaterial = new THREE.PointsMaterial({
-                color: 0x44e3e0,
-                size: 0.1,
-                transparent: true,
-                opacity: 0.6
-            });
-
-            const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
-            scene.add(particleSystem);
-        }
-
-        function animate() {
-            requestAnimationFrame(animate);
-
-            // Rotate floating shapes
-            particles.forEach(particle => {
-                particle.rotation.x += particle.userData.rotationSpeed.x;
-                particle.rotation.y += particle.userData.rotationSpeed.y;
-                particle.rotation.z += particle.userData.rotationSpeed.z;
-            });
-
-            // Camera movement based on scroll
-            const scrollY = window.pageYOffset;
-            camera.position.y = scrollY * 0.001;
-            camera.rotation.x = scrollY * 0.0002;
-
-            renderer.render(scene, camera);
-        }
-
-        // Smooth scrolling navigation
-        document.querySelectorAll('.nav-3d a').forEach(link => {
+    document.addEventListener('DOMContentLoaded', function() {
+        // Navigation functionality
+        document.querySelectorAll('nav a').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
+                    target.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start' 
                     });
+                }
+                document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Active nav on scroll
+        window.addEventListener('scroll', () => {
+            const fromTop = window.scrollY + 100;
+            document.querySelectorAll('nav a').forEach(link => {
+                const section = document.querySelector(link.getAttribute('href'));
+                if (section && 
+                    section.offsetTop <= fromTop && 
+                    section.offsetTop + section.offsetHeight > fromTop) {
+                    document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
                 }
             });
         });
 
-        // Form enhancement with 3D effects
-        document.querySelectorAll('.form-3d input, .form-3d textarea, .form-3d select').forEach(element => {
-            element.addEventListener('focus', function() {
-                this.style.transform = 'translateZ(10px) scale(1.02)';
+        // Form elements
+        const contactForm = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const buttonText = document.getElementById('buttonText');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const successMsg = document.getElementById('successMessage');
+        const errorMsg = document.getElementById('errorMessage');
+        const messageField = document.getElementById('message');
+        const charCounter = document.getElementById('charCounter');
+        const debugInfo = document.getElementById('debugInfo');
+        const hiddenIframe = document.getElementById('hidden_iframe');
+
+        // Utility functions
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function showMessage(element, message = null) {
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+            debugInfo.style.display = 'none';
+            
+            if (message) element.innerHTML = message;
+            element.style.display = 'block';
+            element.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'nearest' 
+            });
+        }
+
+        function setLoadingState(loading) {
+            if (loading) {
+                submitBtn.disabled = true;
+                buttonText.style.display = 'none';
+                loadingSpinner.style.display = 'block';
+            } else {
+                submitBtn.disabled = false;
+                buttonText.style.display = 'inline';
+                loadingSpinner.style.display = 'none';
+            }
+        }
+
+        function resetForm() {
+            contactForm.reset();
+            charCounter.textContent = '0 / 1000 characters';
+            charCounter.style.color = '#b1bfc5';
+        }
+
+        // Character counter for message field
+        messageField.addEventListener('input', function() {
+            const length = this.value.length;
+            charCounter.textContent = `${length} / 1000 characters`;
+            
+            if (length > 900) {
+                charCounter.style.color = '#ea4335';
+            } else if (length > 800) {
+                charCounter.style.color = '#fbbc04';
+            } else {
+                charCounter.style.color = '#b1bfc5';
+            }
+        });
+
+        // Form field focus effects
+        document.querySelectorAll('.contact-form input, .contact-form textarea, .contact-form select').forEach(field => {
+            field.addEventListener('focus', function() {
+                this.style.transform = 'translateY(-1px)';
+                this.style.boxShadow = '0 0 15px rgba(68, 227, 224, 0.4)';
             });
             
-            element.addEventListener('blur', function() {
-                this.style.transform = 'translateZ(0px) scale(1)';
+            field.addEventListener('blur', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '0 0 10px rgba(68, 227, 224, 0.3)';
             });
         });
 
-        // Mouse movement parallax effect
-        document.addEventListener('mousemove', (event) => {
-            const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-            const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+        // Form submission handler
+        contactForm.addEventListener('submit', function(e) {
+            // Hide all messages first
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+            debugInfo.style.display = 'none';
+
+            // Get form values for validation
+            const formData = {
+                name: document.getElementById('name').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                project: document.getElementById('project').value.trim(),
+                budget: document.getElementById('budget').value.trim(),
+                message: document.getElementById('message').value.trim()
+            };
+
+            // Client-side validation
+            if (!formData.name) {
+                e.preventDefault();
+                showMessage(errorMsg, '❌ Please enter your name.');
+                return false;
+            }
+
+            if (!formData.email) {
+                e.preventDefault();
+                showMessage(errorMsg, '❌ Please enter your email address.');
+                return false;
+            }
+
+            if (!isValidEmail(formData.email)) {
+                e.preventDefault();
+                showMessage(errorMsg, '❌ Please enter a valid email address.');
+                return false;
+            }
+
+            if (!formData.message) {
+                e.preventDefault();
+                showMessage(errorMsg, '❌ Please enter your message.');
+                return false;
+            }
+
+            if (formData.message.length < 10) {
+                e.preventDefault();
+                showMessage(errorMsg, '❌ Please provide a more detailed message (at least 10 characters).');
+                return false;
+            }
+
+            // Add timestamp to form
+            const timestampInput = document.createElement('input');
+            timestampInput.type = 'hidden';
+            timestampInput.name = 'timestamp';
+            timestampInput.value = new Date().toISOString();
+            contactForm.appendChild(timestampInput);
+
+            // Set loading state
+            setLoadingState(true);
+
+            // Handle iframe load events
+            let formSubmitted = false;
             
-            camera.position.x = mouseX * 0.5;
-            camera.position.y = mouseY * 0.5;
-        });
+            function handleSubmissionComplete() {
+                if (!formSubmitted) {
+                    formSubmitted = true;
+                    setLoadingState(false);
+                    
+                    showMessage(successMsg, '✅ Thank you! Your message has been sent successfully. I\'ll get back to you within 24 hours.');
+                    resetForm();
+                }
+            }
 
-        // Resize handler
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        // Initialize 3D scene when page loads
-        window.addEventListener('load', init3D);
-
-        // Form submission handler (keeping your original functionality)
-        document.querySelector('.form-3d').addEventListener('submit', function(e) {
-            const submitBtn = document.querySelector('.submit-3d');
-            submitBtn.innerHTML = 'Sending to 3D Space...';
-            submitBtn.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+            // Set up iframe event listeners
+            hiddenIframe.onload = handleSubmissionComplete;
             
-            // Add a small delay for visual effect
+            // Fallback timeout in case iframe doesn't load
             setTimeout(() => {
-                // Your original form submission logic here
-            }, 1000);
+                if (!formSubmitted) {
+                    handleSubmissionComplete();
+                }
+            }, 3000);
+
+            // Let the form submit naturally to the iframe
+            return true;
         });
-    </script>
+
+        // Alternative fetch method (backup)
+        window.submitViaFetch = async function() {
+            const formData = new FormData(contactForm);
+            
+            try {
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'no-cors' // This bypasses CORS but limits response access
+                });
+                
+                showMessage(successMsg, '✅ Thank you! Your message has been sent successfully.');
+                resetForm();
+                
+            } catch (error) {
+                showMessage(errorMsg, '❌ Error submitting form. Please try again.');
+                console.error('Fetch error:', error);
+            }
+            
+            setLoadingState(false);
+        };
+
+        // Test connection function
+        window.testConnection = async function() {
+            const testUrl = contactForm.action;
+            try {
+                const response = await fetch(testUrl + '?test=1', {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                const text = await response.text();
+                
+            } catch (error) {
+                console.error('Connection test failed:', error);
+            }
+        };
+
+        // Initialize character counter
+        charCounter.textContent = '0 / 1000 characters';
+    });
+</script>
+
 </body>
 </html>
