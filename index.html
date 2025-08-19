@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Form - Google Sheets Integration</title>
+    <title>TechCraft Studio - Premium Web Development Services</title>
     <style>
         * {
             margin: 0;
@@ -17,6 +17,7 @@
             color: #333;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            scroll-behavior: smooth;
         }
 
         /* Navigation */
@@ -25,10 +26,11 @@
             top: 0;
             width: 100%;
             background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
             z-index: 1000;
             padding: 1rem 0;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
 
         .nav-container {
@@ -43,25 +45,45 @@
         nav a {
             text-decoration: none;
             color: #333;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
+            font-weight: 600;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(68, 227, 224, 0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        nav a:hover::before {
+            left: 100%;
         }
 
         nav a:hover,
         nav a.active {
-            background: #44e3e0;
+            background: linear-gradient(135deg, #44e3e0 0%, #667eea 100%);
             color: white;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(68, 227, 224, 0.3);
         }
 
         /* Sections */
         .section {
             min-height: 100vh;
-            padding: 100px 0 50px;
+            padding: 120px 0 80px;
             display: flex;
             align-items: center;
+            position: relative;
+            overflow: hidden;
         }
 
         .container {
@@ -71,52 +93,270 @@
             width: 100%;
         }
 
-        h1, h2 {
+        /* Animated background elements */
+        .section::before {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            top: 10%;
+            right: -100px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .section::after {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            bottom: 10%;
+            left: -75px;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        h1, h2, h3 {
             text-align: center;
             margin-bottom: 2rem;
             color: white;
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #44e3e0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px rgba(68, 227, 224, 0.3)); }
+            to { filter: drop-shadow(0 0 30px rgba(68, 227, 224, 0.6)); }
         }
 
         h2 {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
+            margin-bottom: 3rem;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
         }
 
         p {
             text-align: center;
             font-size: 1.2rem;
             color: rgba(255, 255, 255, 0.9);
-            max-width: 600px;
-            margin: 0 auto;
+            max-width: 800px;
+            margin: 0 auto 2rem auto;
+            line-height: 1.8;
+        }
+
+        /* Hero section enhancements */
+        .hero-content {
+            text-align: center;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 3rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, #44e3e0 0%, #667eea 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(68, 227, 224, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(68, 227, 224, 0.4);
+        }
+
+        /* Feature cards */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-card h3 {
+            color: #44e3e0;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            font-size: 1rem;
+            text-align: left;
+        }
+
+        /* Services section */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #44e3e0 0%, #667eea 100%);
+        }
+
+        .service-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .service-card h3 {
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .service-card p {
+            color: #666;
+            font-size: 1rem;
+            text-align: left;
+        }
+
+        .service-price {
+            display: inline-block;
+            background: linear-gradient(135deg, #44e3e0 0%, #667eea 100%);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        /* About section enhancements */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-top: 3rem;
+        }
+
+        .about-text {
+            text-align: left;
+        }
+
+        .about-text p {
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #44e3e0;
+            display: block;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
         }
 
         /* Contact Form */
         .contact-container {
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
         }
 
         .contact-form {
             background: rgba(255, 255, 255, 0.95);
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.8rem;
         }
 
         label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
             font-weight: 600;
             color: #333;
+            font-size: 1.1rem;
         }
 
         input[type="text"],
@@ -125,13 +365,13 @@
         select,
         textarea {
             width: 100%;
-            padding: 1rem;
+            padding: 1.2rem;
             border: 2px solid #e0e0e0;
-            border-radius: 10px;
+            border-radius: 15px;
             font-size: 1rem;
             transition: all 0.3s ease;
             background: white;
-            box-shadow: 0 0 10px rgba(68, 227, 224, 0.3);
+            box-shadow: 0 5px 15px rgba(68, 227, 224, 0.1);
         }
 
         input:focus,
@@ -139,25 +379,25 @@
         textarea:focus {
             outline: none;
             border-color: #44e3e0;
-            box-shadow: 0 0 15px rgba(68, 227, 224, 0.4);
-            transform: translateY(-1px);
+            box-shadow: 0 5px 25px rgba(68, 227, 224, 0.3);
+            transform: translateY(-2px);
         }
 
         textarea {
             resize: vertical;
-            min-height: 120px;
+            min-height: 140px;
         }
 
         /* Phone Number Styling */
         .phone-container {
             display: flex;
-            gap: 5px;
+            gap: 8px;
         }
 
         .country-code-select {
             flex: 0 0 auto;
-            min-width: 90px;
-            max-width: 120px;
+            min-width: 100px;
+            max-width: 130px;
         }
 
         .phone-input {
@@ -168,7 +408,7 @@
             text-align: right;
             font-size: 0.85rem;
             color: #b1bfc5;
-            margin-top: 0.25rem;
+            margin-top: 0.5rem;
         }
 
         .submit-btn {
@@ -176,19 +416,20 @@
             background: linear-gradient(135deg, #44e3e0 0%, #667eea 100%);
             color: white;
             border: none;
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
+            padding: 1.2rem 2rem;
+            font-size: 1.2rem;
             font-weight: 600;
-            border-radius: 10px;
+            border-radius: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 10px 30px rgba(68, 227, 224, 0.3);
         }
 
         .submit-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(68, 227, 224, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(68, 227, 224, 0.4);
         }
 
         .submit-btn:disabled {
@@ -203,10 +444,10 @@
         }
 
         .spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top: 2px solid white;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -218,23 +459,24 @@
 
         /* Messages */
         .message {
-            margin-top: 1rem;
-            padding: 1rem;
-            border-radius: 10px;
+            margin-top: 1.5rem;
+            padding: 1.2rem;
+            border-radius: 15px;
             text-align: center;
             font-weight: 500;
+            font-size: 1.1rem;
         }
 
         .success-message {
-            background: #d4edda;
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
             color: #155724;
-            border: 1px solid #c3e6cb;
+            border: 2px solid #c3e6cb;
         }
 
         .error-message {
-            background: #f8d7da;
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
             color: #721c24;
-            border: 1px solid #f5c6cb;
+            border: 2px solid #f5c6cb;
         }
 
         .debug-info {
@@ -242,7 +484,7 @@
             padding: 1rem;
             background: #f8f9fa;
             border: 1px solid #dee2e6;
-            border-radius: 5px;
+            border-radius: 10px;
             font-family: monospace;
             font-size: 0.85rem;
             white-space: pre-wrap;
@@ -258,6 +500,35 @@
             border: none;
         }
 
+        /* Contact info cards */
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .contact-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .contact-card h3 {
+            color: #44e3e0;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .nav-container {
@@ -266,21 +537,30 @@
             }
 
             nav a {
-                padding: 0.5rem;
+                padding: 0.6rem 1rem;
                 font-size: 0.9rem;
             }
 
             h1 {
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
 
             h2 {
-                font-size: 1.8rem;
+                font-size: 2rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .contact-form {
                 margin: 0 1rem;
-                padding: 1.5rem;
+                padding: 2rem;
             }
 
             .container {
@@ -289,12 +569,17 @@
 
             .phone-container {
                 flex-direction: column;
-                gap: 10px;
+                gap: 15px;
             }
 
             .country-code-select {
                 min-width: 100%;
                 max-width: 100%;
+            }
+
+            .features-grid,
+            .services-grid {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -305,15 +590,23 @@
             }
 
             .contact-form {
-                padding: 1rem;
+                padding: 1.5rem;
             }
 
             h1 {
-                font-size: 1.8rem;
+                font-size: 2rem;
             }
 
             h2 {
-                font-size: 1.5rem;
+                font-size: 1.8rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-number {
+                font-size: 2rem;
             }
         }
     </style>
@@ -330,28 +623,132 @@
 
     <section id="home" class="section">
         <div class="container">
-            <h1>Welcome</h1>
-            <p>Professional web development services</p>
+            <div class="hero-content">
+                <h1>TechCraft Studio</h1>
+                <p class="hero-subtitle">Crafting Digital Excellence Through Innovation</p>
+                <p>Transform your ideas into powerful digital solutions with our premium web development services. We specialize in creating stunning, high-performance websites and applications that drive results.</p>
+                <a href="#contact" class="cta-button">Start Your Project</a>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🚀</span>
+                    <h3>Lightning Fast</h3>
+                    <p>Optimized for speed and performance with cutting-edge technologies and best practices.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📱</span>
+                    <h3>Mobile First</h3>
+                    <p>Responsive designs that look perfect on every device, from smartphones to desktops.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🛡️</span>
+                    <h3>Secure & Reliable</h3>
+                    <p>Enterprise-grade security and reliability you can trust for your business-critical applications.</p>
+                </div>
+            </div>
         </div>
     </section>
 
     <section id="about" class="section">
         <div class="container">
-            <h2>About</h2>
-            <p>Learn more about our services and expertise.</p>
+            <h2>About TechCraft Studio</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>We are passionate about creating digital experiences that make a difference. Our team combines fresh perspectives with modern technical skills to deliver innovative solutions that exceed expectations.</p>
+                    <p>We stay ahead of industry trends and continuously learn new technologies to provide cutting-edge solutions using the latest frameworks and best practices.</p>
+                    <p>We're excited to help businesses of all sizes establish their digital presence and achieve their goals with modern, efficient web solutions.</p>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">Commitment to Quality</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">Latest</span>
+                        <span class="stat-label">Technologies Used</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">Fast</span>
+                        <span class="stat-label">Project Delivery</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">24/7</span>
+                        <span class="stat-label">Support Available</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
     <section id="services" class="section">
         <div class="container">
-            <h2>Services</h2>
-            <p>We offer comprehensive web development solutions.</p>
+            <h2>Our Services</h2>
+            <p>We offer comprehensive digital solutions tailored to your specific needs and business objectives.</p>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>🌐 Website Development</h3>
+                    <p>Custom websites built with modern frameworks, optimized for performance and user experience. Includes responsive design, SEO optimization, and content management systems.</p>
+                    <span class="service-price">Starting at ₹2,10,000</span>
+                </div>
+                <div class="service-card">
+                    <h3>🛒 E-commerce Solutions</h3>
+                    <p>Complete online stores with payment integration, inventory management, and advanced analytics. Built for scalability and conversion optimization.</p>
+                    <span class="service-price">Starting at ₹4,20,000</span>
+                </div>
+                <div class="service-card">
+                    <h3>⚡ Web Applications</h3>
+                    <p>Complex web applications and SaaS platforms with real-time features, API integrations, and robust backend systems.</p>
+                    <span class="service-price">Starting at ₹8,40,000</span>
+                </div>
+                <div class="service-card">
+                    <h3>📱 Mobile Applications</h3>
+                    <p>Native and cross-platform mobile apps for iOS and Android, featuring seamless user interfaces and powerful functionality.</p>
+                    <span class="service-price">Starting at ₹6,72,000</span>
+                </div>
+                <div class="service-card">
+                    <h3>☁️ Cloud Solutions</h3>
+                    <p>Scalable cloud infrastructure, deployment automation, and DevOps services to ensure your applications perform at their best.</p>
+                    <span class="service-price">Starting at ₹2,52,000</span>
+                </div>
+                <div class="service-card">
+                    <h3>🔧 Maintenance & Support</h3>
+                    <p>Ongoing maintenance, security updates, performance monitoring, and technical support to keep your digital assets running smoothly.</p>
+                    <span class="service-price">Starting at ₹42,000/month</span>
+                </div>
+            </div>
         </div>
     </section>
 
     <section id="contact" class="section">
         <div class="container">
-            <h2>Contact Us</h2>
+            <h2>Get In Touch</h2>
+            <p>Ready to bring your vision to life? Let's discuss your project and create something amazing together.</p>
+            
+            <div class="contact-info">
+                <div class="contact-card">
+                    <h3>📧 Email Us</h3>
+                    <p>hello@techcraftstudio.com</p>
+                    <p>Response within 2 hours</p>
+                </div>
+                <div class="contact-card">
+                    <h3>📞 Call Us</h3>
+                    <p>+91 98765 43210</p>
+                    <p>Mon-Fri, 9 AM - 6 PM IST</p>
+                </div>
+                <div class="contact-card">
+                    <h3>🌍 Location</h3>
+                    <p>Siliguri, West Bengal</p>
+                    <p>Serving clients worldwide</p>
+                </div>
+                <div class="contact-card">
+                    <h3>⚡ Quick Response</h3>
+                    <p>Free consultation</p>
+                    <p>Project quotes in 24 hours</p>
+                </div>
+            </div>
+            
             <div class="contact-container">
                 <form id="contactForm" class="contact-form" 
                       action="https://script.google.com/macros/s/AKfycby5YooFlJE-YRVxyW86x2m6gi3_tPew4egmALR-OIFOJKgKyGQisT-S9Wt8xbzSfBeafw/exec" 
@@ -371,7 +768,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="phone">Phone Number</label>
+                        <label for="phone">Phone Number *</label>
                         <div class="phone-container">
                             <select id="countryCode" name="countryCode" class="country-code-select">
                                 <option value="+1">🇺🇸 +1</option>
@@ -585,38 +982,56 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="project">Project Type</label>
+                        <label for="project">Project Type *</label>
                         <select id="project" name="project" required>
                             <option value="">Select project type</option>
                             <option value="website">Website Development</option>
                             <option value="ecommerce">E-commerce</option>
                             <option value="webapp">Web Application</option>
                             <option value="mobile">Mobile App</option>
+                            <option value="cloud">Cloud Solutions</option>
+                            <option value="maintenance">Maintenance & Support</option>
+                            <option value="consultation">Consultation</option>
                             <option value="other">Other</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="budget">Budget Range</label>
+                        <label for="budget">Budget Range *</label>
                         <select id="budget" name="budget" required>
                             <option value="">Select budget range</option>
-                            <option value="under-5k">Under $5,000</option>
-                            <option value="5k-10k">$5,000 - $10,000</option>
-                            <option value="10k-25k">$10,000 - $25,000</option>
-                            <option value="25k-50k">$25,000 - $50,000</option>
-                            <option value="over-50k">Over $50,000</option>
+                            <option value="under-2.1L">Under ₹2,10,000</option>
+                            <option value="2.1L-4.2L">₹2,10,000 - ₹4,20,000</option>
+                            <option value="4.2L-8.4L">₹4,20,000 - ₹8,40,000</option>
+                            <option value="8.4L-21L">₹8,40,000 - ₹21,00,000</option>
+                            <option value="21L-42L">₹21,00,000 - ₹42,00,000</option>
+                            <option value="over-42L">Over ₹42,00,000</option>
+                            <option value="discuss">Let's Discuss</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" name="message" rows="5" maxlength="1000" required 
-                                  placeholder="Tell us about your project..."></textarea>
-                        <div id="charCounter" class="char-counter">0 / 1000 characters</div>
+                        <label for="timeline">Project Timeline</label>
+                        <select id="timeline" name="timeline">
+                            <option value="">Select timeline</option>
+                            <option value="asap">ASAP (Rush Project)</option>
+                            <option value="1-month">Within 1 month</option>
+                            <option value="2-3-months">2-3 months</option>
+                            <option value="3-6-months">3-6 months</option>
+                            <option value="6-months-plus">6+ months</option>
+                            <option value="flexible">Flexible</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Project Details *</label>
+                        <textarea id="message" name="message" rows="6" maxlength="1500" required 
+                                  placeholder="Please describe your project requirements, goals, target audience, and any specific features you need..."></textarea>
+                        <div id="charCounter" class="char-counter">0 / 1500 characters</div>
                     </div>
 
                     <button type="submit" id="submitBtn" class="submit-btn">
-                        <span id="buttonText">Send Message</span>
+                        <span id="buttonText">Send Project Request</span>
                         <div id="loadingSpinner" class="loading-spinner" style="display: none;">
                             <div class="spinner"></div>
                         </div>
@@ -624,11 +1039,11 @@
                 </form>
 
                 <div id="successMessage" class="message success-message" style="display: none;">
-                    ✅ Thank you! Your message has been sent successfully. I'll get back to you within 24 hours.
+                    ✅ Thank you for your interest! We've received your project request and will get back to you within 2 hours with a detailed response and next steps.
                 </div>
 
                 <div id="errorMessage" class="message error-message" style="display: none;">
-                    ❌ There was an error sending your message. Please try again.
+                    ❌ There was an error sending your request. Please try again or contact us directly at hello@techcraftstudio.com
                 </div>
 
                 <div id="debugInfo" class="debug-info" style="display: none;"></div>
@@ -640,6 +1055,173 @@
     <iframe name="hidden_iframe" id="hidden_iframe" class="hidden-iframe"></iframe>
 
     <script>
+        // Smooth navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navigation active state
+            const navLinks = document.querySelectorAll('nav a');
+            const sections = document.querySelectorAll('.section');
+
+            function updateActiveNav() {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 100;
+                    const sectionHeight = section.offsetHeight;
+                    if (window.pageYOffset >= sectionTop && window.pageYOffset < sectionTop + sectionHeight) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', updateActiveNav);
+            updateActiveNav();
+
+            // Smooth scrolling
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    if (targetSection) {
+                        targetSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Character counter for message textarea
+            const messageTextarea = document.getElementById('message');
+            const charCounter = document.getElementById('charCounter');
+
+            function updateCharCount() {
+                const count = messageTextarea.value.length;
+                charCounter.textContent = count + ' / 1500 characters';
+                
+                if (count > 1400) {
+                    charCounter.style.color = '#e74c3c';
+                } else if (count > 1200) {
+                    charCounter.style.color = '#f39c12';
+                } else {
+                    charCounter.style.color = '#b1bfc5';
+                }
+            }
+
+            messageTextarea.addEventListener('input', updateCharCount);
+            updateCharCount();
+
+            // Form submission handling
+            const contactForm = document.getElementById('contactForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const buttonText = document.getElementById('buttonText');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            const debugInfo = document.getElementById('debugInfo');
+
+            function showLoading() {
+                submitBtn.disabled = true;
+                buttonText.style.display = 'none';
+                loadingSpinner.style.display = 'flex';
+            }
+
+            function hideLoading() {
+                submitBtn.disabled = false;
+                buttonText.style.display = 'inline';
+                loadingSpinner.style.display = 'none';
+            }
+
+            function showMessage(type, message) {
+                hideMessages();
+                if (type === 'success') {
+                    successMessage.style.display = 'block';
+                    successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else {
+                    errorMessage.style.display = 'block';
+                    errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+
+            function hideMessages() {
+                successMessage.style.display = 'none';
+                errorMessage.style.display = 'none';
+                debugInfo.style.display = 'none';
+            }
+
+            contactForm.addEventListener('submit', function(e) {
+                showLoading();
+                hideMessages();
+                
+                // Form validation
+                const requiredFields = contactForm.querySelectorAll('[required]');
+                let isValid = true;
+                
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        isValid = false;
+                        field.style.borderColor = '#e74c3c';
+                    } else {
+                        field.style.borderColor = '#e0e0e0';
+                    }
+                });
+
+                if (!isValid) {
+                    e.preventDefault();
+                    hideLoading();
+                    showMessage('error');
+                    return;
+                }
+
+                // If validation passes, the form will submit to the iframe
+                setTimeout(() => {
+                    hideLoading();
+                    showMessage('success');
+                    contactForm.reset();
+                    updateCharCount();
+                }, 2000);
+            });
+
+            // Handle iframe load (form submission response)
+            const hiddenIframe = document.getElementById('hidden_iframe');
+            hiddenIframe.addEventListener('load', function() {
+                if (submitBtn.disabled) {
+                    hideLoading();
+                    showMessage('success');
+                    contactForm.reset();
+                    updateCharCount();
+                }
+            });
+
+            // Phone number formatting
+            const phoneInput = document.getElementById('phone');
+            phoneInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 15) {
+                    value = value.substr(0, 15);
+                }
+                e.target.value = value;
+            });
+
+            // Enhanced form animations
+            const formInputs = contactForm.querySelectorAll('input, select, textarea');
+            formInputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'translateY(-2px)';
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'translateY(0)';
+                });
+            });
+        });
+ 
     document.addEventListener('DOMContentLoaded', function() {
         // Navigation functionality
         document.querySelectorAll('nav a').forEach(link => {
