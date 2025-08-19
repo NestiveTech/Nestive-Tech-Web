@@ -490,24 +490,7 @@
         } else {
           throw new Error(result.message || 'Server returned error');
         }
-      } catch (error) {
-        let errorMessage = '❌ ';
-        if (String(error.message).includes('Failed to fetch')) {
-          errorMessage += 'Connection failed. Please check your internet connection and try again.';
-        } else if (String(error.message).startsWith('HTTP')) {
-          errorMessage += `Server error: ${error.message}`;
-        } else {
-          errorMessage += `Error: ${error.message}`;
-        }
-        errorMessage += '<br><small>If the problem persists, please email me directly.</small>';
-        showMessage(errorMsg, errorMessage);
-        showDebugInfo({
-          error: String(error.message),
-          url: CONFIG.sheetsApiUrl,
-          type: 'submission_error',
-          timestamp: new Date().toISOString()
-        });
-      } finally {
+      }  finally {
         setLoadingState(false);
       }
     });
