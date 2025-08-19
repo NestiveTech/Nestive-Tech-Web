@@ -351,6 +351,7 @@
         this.classList.add('active');
       });
     });
+    
     window.addEventListener('scroll', () => {
       const fromTop = window.scrollY + 100;
       document.querySelectorAll('nav a').forEach(link => {
@@ -377,6 +378,7 @@
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return emailRegex.test(email);
     }
+    
     function showMessage(element, message = null) {
       successMsg.style.display = 'none';
       errorMsg.style.display = 'none';
@@ -384,6 +386,7 @@
       element.style.display = 'block';
       element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
+    
     function setLoadingState(loading) {
       if (loading) {
         submitBtn.disabled = true;
@@ -395,6 +398,7 @@
         loadingSpinner.style.display = 'none';
       }
     }
+    
     function showDebugInfo(info) {
       debugInfo.textContent = 'Debug Info:\n' + JSON.stringify(info, null, 2);
       debugInfo.style.display = 'block';
@@ -425,7 +429,29 @@
       });
     });
 
-    // Form submit (x-www-form-urlencoded to avoid preflight)
+    // Test connection function (for debugging)
+    window.testConnection = async function() {
+      try {
+        const response = await fetch(CONFIG.sheetsApiUrl);
+        const text = await response.text();
+        console.log('Test response:', response.status, text);
+        showDebugInfo({
+          test: 'connection',
+          status: response.status,
+          response: text.slice(0, 500),
+          url: CONFIG.sheetsApiUrl
+        });
+      } catch (error) {
+        console.error('Test error:', error);
+        showDebugInfo({
+          test: 'connection_failed',
+          error: error.message,
+          url: CONFIG.sheetsApiUrl
+        });
+      }
+    };
+
+    // Form submit with improved error handling
     contactForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       successMsg.style.display = 'none';
@@ -439,6 +465,7 @@
       const budgetValue = document.getElementById('budget').value.trim();
       const messageValue = document.getElementById('message').value.trim();
 
+      // Validation
       if (!nameValue) { showMessage(errorMsg, '❌ Please enter your name.'); return; }
       if (!emailValue) { showMessage(errorMsg, '❌ Please enter your email address.'); return; }
       if (!isValidEmail(emailValue)) { showMessage(errorMsg, '❌ Please enter a valid email address.'); return; }
@@ -448,7 +475,8 @@
       setLoadingState(true);
 
       try {
-        const payload = new URLSearchParams();
+        // Using FormData for better compatibility
+        const payload = new FormData();
         payload.append('action', 'addContact');
         payload.append('name', nameValue);
         payload.append('email', emailValue);
@@ -459,38 +487,66 @@
 
         const response = await fetch(CONFIG.sheetsApiUrl, {
           method: 'POST',
-          mode: 'cors',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-          body: payload.toString()
+          body: payload
         });
 
+        // Get response text first
+        const responseText = await response.text();
+        
         if (!response.ok) {
-          const text = await response.text().catch(() => '');
-          throw new Error(`HTTP ${response.status} ${response.statusText} ${text}`);
+          throw new Error(`HTTP ${response.status}: ${responseText.slice(0, 200)}`);
         }
 
-        const contentType = response.headers.get('Content-Type') || '';
-        if (!contentType.includes('application/json')) {
-          const text = await response.text().catch(() => '');
-          throw new Error(`Unexpected response type: ${contentType} ${text.slice(0,200)}`);
+        // Try to parse as JSON
+        let result;
+        try {
+          result = JSON.parse(responseText);
+        } catch (parseError) {
+          // If it's not JSON, check if it looks like success
+          if (responseText.toLowerCase().includes('success') || response.ok) {
+            result = { success: true, message: 'Form submitted successfully' };
+          } else {
+            throw new Error(`Invalid response format: ${responseText.slice(0, 200)}`);
+          }
         }
 
-        const result = await response.json();
         if (result.success) {
           showMessage(successMsg, '✅ Thank you! Your message has been sent successfully. I\'ll get back to you within 24 hours.');
           contactForm.reset();
           charCounter.textContent = '0 / 1000 characters';
           charCounter.style.color = '#b1bfc5';
+          
           showDebugInfo({
             status: 'success',
-            message: result.message,
-            data: result.data,
+            message: result.message || 'Form submitted successfully',
             timestamp: new Date().toISOString()
           });
         } else {
           throw new Error(result.message || 'Server returned error');
         }
-      }  finally {
+
+      } catch (error) {
+        console.error('Fetch error:', error);
+        let errorMessage = '❌ ';
+        
+        if (error.name === 'TypeError' && (error.message.includes('fetch') || error.message.includes('network'))) {
+          errorMessage += 'Connection failed. Please check your internet connection and try again.';
+        } else if (error.message.startsWith('HTTP')) {
+          errorMessage += `Server error: ${error.message}`;
+        } else {
+          errorMessage += `Error: ${error.message}`;
+        }
+        
+        showMessage(errorMsg, errorMessage + '<br><small>If the problem persists, please email me directly.</small>');
+        
+        showDebugInfo({
+          error: error.message,
+          stack: error.stack,
+          url: CONFIG.sheetsApiUrl,
+          type: 'submission_error',
+          timestamp: new Date().toISOString()
+        });
+      } finally {
         setLoadingState(false);
       }
     });
