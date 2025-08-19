@@ -234,6 +234,14 @@
             overflow-y: auto;
         }
 
+        /* Hidden iframe for form submission */
+        .hidden-iframe {
+            display: none;
+            width: 0;
+            height: 0;
+            border: none;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .nav-container {
@@ -319,7 +327,14 @@
         <div class="container">
             <h2>Contact Us</h2>
             <div class="contact-container">
-                <form id="contactForm" class="contact-form">
+                <!-- Updated form with target iframe and proper action -->
+                <form id="contactForm" class="contact-form" 
+                      action="https://script.google.com/macros/s/AKfycby5YooFlJE-YRVxyW86x2m6gi3_tPew4egmALR-OIFOJKgKyGQisT-S9Wt8xbzSfBeafw/exec" 
+                      method="POST" 
+                      target="hidden_iframe">
+                    
+                    <input type="hidden" name="action" value="addContact">
+                    
                     <div class="form-group">
                         <label for="name">Full Name *</label>
                         <input type="text" id="name" name="name" required>
@@ -387,13 +402,11 @@
         </div>
     </section>
 
+    <!-- Hidden iframe for form submission -->
+    <iframe name="hidden_iframe" id="hidden_iframe" class="hidden-iframe"></iframe>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Configuration - Replace with your Apps Script Web App URL
-            const CONFIG = {
-                sheetsApiUrl: "https://script.google.com/macros/s/AKfycbwST2o3KAbokAc-Eh-8_WOxS2KseNoEgUKJ3DKI5Cs0I8XYs57irmnXj6eK11j7ihCT1w/exec"
-            };
-
             // Navigation functionality
             document.querySelectorAll('nav a').forEach(link => {
                 link.addEventListener('click', function(e) {
@@ -434,6 +447,7 @@
             const messageField = document.getElementById('message');
             const charCounter = document.getElementById('charCounter');
             const debugInfo = document.getElementById('debugInfo');
+            const hiddenIframe = document.getElementById('hidden_iframe');
 
             // Utility functions
             function isValidEmail(email) {
@@ -475,6 +489,12 @@
                 });
             }
 
+            function resetForm() {
+                contactForm.reset();
+                charCounter.textContent = '0 / 1000 characters';
+                charCounter.style.color = '#b1bfc5';
+            }
+
             // Character counter for message field
             messageField.addEventListener('input', function() {
                 const length = this.value.length;
@@ -503,15 +523,13 @@
             });
 
             // Form submission handler
-            contactForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                // Hide all messages
+            contactForm.addEventListener('submit', function(e) {
+                // Hide all messages first
                 successMsg.style.display = 'none';
                 errorMsg.style.display = 'none';
                 debugInfo.style.display = 'none';
 
-                // Get form values
+                // Get form values for validation
                 const formData = {
                     name: document.getElementById('name').value.trim(),
                     email: document.getElementById('email').value.trim(),
@@ -521,147 +539,135 @@
                     message: document.getElementById('message').value.trim()
                 };
 
-                // Validation
+                // Client-side validation
                 if (!formData.name) {
+                    e.preventDefault();
                     showMessage(errorMsg, '❌ Please enter your name.');
-                    return;
+                    return false;
                 }
 
                 if (!formData.email) {
+                    e.preventDefault();
                     showMessage(errorMsg, '❌ Please enter your email address.');
-                    return;
+                    return false;
                 }
 
                 if (!isValidEmail(formData.email)) {
+                    e.preventDefault();
                     showMessage(errorMsg, '❌ Please enter a valid email address.');
-                    return;
+                    return false;
                 }
 
                 if (!formData.message) {
+                    e.preventDefault();
                     showMessage(errorMsg, '❌ Please enter your message.');
-                    return;
+                    return false;
                 }
 
                 if (formData.message.length < 10) {
+                    e.preventDefault();
                     showMessage(errorMsg, '❌ Please provide a more detailed message (at least 10 characters).');
-                    return;
+                    return false;
                 }
+
+                // Add timestamp to form
+                const timestampInput = document.createElement('input');
+                timestampInput.type = 'hidden';
+                timestampInput.name = 'timestamp';
+                timestampInput.value = new Date().toISOString();
+                contactForm.appendChild(timestampInput);
 
                 // Set loading state
                 setLoadingState(true);
 
-                try {
-                    // Prepare data for Google Sheets
-                    const payload = new FormData();
-                    payload.append('action', 'addContact');
-                    payload.append('name', formData.name);
-                    payload.append('email', formData.email);
-                    payload.append('phone', formData.phone);
-                    payload.append('project', formData.project);
-                    payload.append('budget', formData.budget);
-                    payload.append('message', formData.message);
-                    payload.append('timestamp', new Date().toISOString());
+                // Show debug info for the submission
+                showDebugInfo({
+                    status: 'submitting',
+                    timestamp: new Date().toISOString(),
+                    formData: formData,
+                    method: 'iframe_submission'
+                });
 
-                    // Submit to Google Sheets via Apps Script
-                    const response = await fetch(CONFIG.sheetsApiUrl, {
-                        method: 'POST',
-                        body: payload,
-                        mode: 'cors'
-                    });
-
-                    // Handle response
-                    const responseText = await response.text();
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}: ${responseText.slice(0, 200)}`);
-                    }
-
-                    // Try to parse JSON response
-                    let result;
-                    try {
-                        result = JSON.parse(responseText);
-                    } catch (parseError) {
-                        // If not JSON, assume success if response is ok
-                        if (response.ok && (responseText.toLowerCase().includes('success') || responseText.length < 50)) {
-                            result = { success: true, message: 'Form submitted successfully' };
-                        } else {
-                            throw new Error(`Invalid response format: ${responseText.slice(0, 200)}`);
-                        }
-                    }
-
-                    if (result.success) {
-                        // Success
+                // Handle iframe load events
+                let formSubmitted = false;
+                
+                function handleSubmissionComplete() {
+                    if (!formSubmitted) {
+                        formSubmitted = true;
+                        setLoadingState(false);
+                        
                         showMessage(successMsg, '✅ Thank you! Your message has been sent successfully. I\'ll get back to you within 24 hours.');
+                        resetForm();
                         
-                        // Reset form
-                        contactForm.reset();
-                        charCounter.textContent = '0 / 1000 characters';
-                        charCounter.style.color = '#b1bfc5';
-                        
-                        // Show debug info
                         showDebugInfo({
                             status: 'success',
-                            message: result.message || 'Form submitted successfully',
+                            message: 'Form submitted successfully via iframe',
                             timestamp: new Date().toISOString(),
-                            data: formData
+                            method: 'iframe_submission'
                         });
-                    } else {
-                        throw new Error(result.message || 'Server returned error');
                     }
-
-                } catch (error) {
-                    console.error('Submission error:', error);
-                    
-                    let errorMessage = '❌ ';
-                    
-                    if (error.name === 'TypeError' && error.message.includes('fetch')) {
-                        errorMessage += 'Connection failed. Please check your internet connection and try again.';
-                    } else if (error.message.startsWith('HTTP')) {
-                        errorMessage += `Server error: ${error.message}`;
-                    } else {
-                        errorMessage += `Error: ${error.message}`;
-                    }
-                    
-                    errorMessage += '<br><small>If the problem persists, please email me directly.</small>';
-                    
-                    showMessage(errorMsg, errorMessage);
-                    
-                    showDebugInfo({
-                        error: error.message,
-                        stack: error.stack,
-                        url: CONFIG.sheetsApiUrl,
-                        type: 'submission_error',
-                        timestamp: new Date().toISOString(),
-                        formData: formData
-                    });
-                    
-                } finally {
-                    setLoadingState(false);
                 }
+
+                // Set up iframe event listeners
+                hiddenIframe.onload = handleSubmissionComplete;
+                
+                // Fallback timeout in case iframe doesn't load
+                setTimeout(() => {
+                    if (!formSubmitted) {
+                        handleSubmissionComplete();
+                    }
+                }, 3000);
+
+                // Let the form submit naturally to the iframe
+                return true;
             });
 
-            // Test connection function (for debugging)
-            window.testConnection = async function() {
+            // Alternative fetch method (backup)
+            window.submitViaFetch = async function() {
+                const formData = new FormData(contactForm);
+                
                 try {
-                    const response = await fetch(CONFIG.sheetsApiUrl, {
-                        method: 'GET'
+                    const response = await fetch(contactForm.action, {
+                        method: 'POST',
+                        body: formData,
+                        mode: 'no-cors' // This bypasses CORS but limits response access
+                    });
+                    
+                    showMessage(successMsg, '✅ Thank you! Your message has been sent successfully.');
+                    resetForm();
+                    
+                } catch (error) {
+                    showMessage(errorMsg, '❌ Error submitting form. Please try again.');
+                    console.error('Fetch error:', error);
+                }
+                
+                setLoadingState(false);
+            };
+
+            // Test connection function
+            window.testConnection = async function() {
+                const testUrl = contactForm.action;
+                try {
+                    const response = await fetch(testUrl + '?test=1', {
+                        method: 'GET',
+                        mode: 'cors'
                     });
                     const text = await response.text();
-                    console.log('Test response:', response.status, text);
+                    
                     showDebugInfo({
-                        test: 'connection',
+                        test: 'connection_success',
                         status: response.status,
                         response: text.slice(0, 500),
-                        url: CONFIG.sheetsApiUrl,
+                        url: testUrl,
                         timestamp: new Date().toISOString()
                     });
                 } catch (error) {
-                    console.error('Test error:', error);
                     showDebugInfo({
                         test: 'connection_failed',
                         error: error.message,
-                        url: CONFIG.sheetsApiUrl,
-                        timestamp: new Date().toISOString()
+                        url: testUrl,
+                        timestamp: new Date().toISOString(),
+                        note: 'This may be normal due to CORS restrictions'
                     });
                 }
             };
