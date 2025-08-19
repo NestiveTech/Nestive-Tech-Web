@@ -640,275 +640,239 @@
     <iframe name="hidden_iframe" id="hidden_iframe" class="hidden-iframe"></iframe>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Navigation functionality
-            document.querySelectorAll('nav a').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({ 
-                            behavior: 'smooth', 
-                            block: 'start' 
-                        });
-                    }
-                    document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
-
-            // Active nav on scroll
-            window.addEventListener('scroll', () => {
-                const fromTop = window.scrollY + 100;
-                document.querySelectorAll('nav a').forEach(link => {
-                    const section = document.querySelector(link.getAttribute('href'));
-                    if (section && 
-                        section.offsetTop <= fromTop && 
-                        section.offsetTop + section.offsetHeight > fromTop) {
-                        document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
-                        link.classList.add('active');
-                    }
-                });
-            });
-
-            // Form elements
-            const contactForm = document.getElementById('contactForm');
-            const submitBtn = document.getElementById('submitBtn');
-            const buttonText = document.getElementById('buttonText');
-            const loadingSpinner = document.getElementById('loadingSpinner');
-            const successMsg = document.getElementById('successMessage');
-            const errorMsg = document.getElementById('errorMessage');
-            const messageField = document.getElementById('message');
-            const charCounter = document.getElementById('charCounter');
-            const debugInfo = document.getElementById('debugInfo');
-            const hiddenIframe = document.getElementById('hidden_iframe');
-
-            // Utility functions
-            function isValidEmail(email) {
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                return emailRegex.test(email);
-            }
-
-            function showMessage(element, message = null) {
-                successMsg.style.display = 'none';
-                errorMsg.style.display = 'none';
-                debugInfo.style.display = 'none';
-                
-                if (message) element.innerHTML = message;
-                element.style.display = 'block';
-                element.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'nearest' 
-                });
-            }
-
-            function setLoadingState(loading) {
-                if (loading) {
-                    submitBtn.disabled = true;
-                    buttonText.style.display = 'none';
-                    loadingSpinner.style.display = 'block';
-                } else {
-                    submitBtn.disabled = false;
-                    buttonText.style.display = 'inline';
-                    loadingSpinner.style.display = 'none';
+    document.addEventListener('DOMContentLoaded', function() {
+        // Navigation functionality
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start' 
+                    });
                 }
+                document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Active nav on scroll
+        window.addEventListener('scroll', () => {
+            const fromTop = window.scrollY + 100;
+            document.querySelectorAll('nav a').forEach(link => {
+                const section = document.querySelector(link.getAttribute('href'));
+                if (section && 
+                    section.offsetTop <= fromTop && 
+                    section.offsetTop + section.offsetHeight > fromTop) {
+                    document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Form elements
+        const contactForm = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const buttonText = document.getElementById('buttonText');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const successMsg = document.getElementById('successMessage');
+        const errorMsg = document.getElementById('errorMessage');
+        const messageField = document.getElementById('message');
+        const charCounter = document.getElementById('charCounter');
+        const debugInfo = document.getElementById('debugInfo');
+        const hiddenIframe = document.getElementById('hidden_iframe');
+
+        // Utility functions
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function showMessage(element, message = null) {
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+            debugInfo.style.display = 'none';
+            
+            if (message) element.innerHTML = message;
+            element.style.display = 'block';
+            element.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'nearest' 
+            });
+        }
+
+        function setLoadingState(loading) {
+            if (loading) {
+                submitBtn.disabled = true;
+                buttonText.style.display = 'none';
+                loadingSpinner.style.display = 'block';
+            } else {
+                submitBtn.disabled = false;
+                buttonText.style.display = 'inline';
+                loadingSpinner.style.display = 'none';
             }
+        }
 
-            // function showDebugInfo(info) {
-            //     debugInfo.textContent = 'Debug Info:\n' + JSON.stringify(info, null, 2);
-            //     debugInfo.style.display = 'block';
-            //     debugInfo.scrollIntoView({ 
-            //         behavior: 'smooth', 
-            //         block: 'nearest' 
-            //     });
-            // }
+        function resetForm() {
+            contactForm.reset();
+            charCounter.textContent = '0 / 1000 characters';
+            charCounter.style.color = '#b1bfc5';
+        }
 
-            function resetForm() {
-                contactForm.reset();
-                charCounter.textContent = '0 / 1000 characters';
+        // Character counter for message field
+        messageField.addEventListener('input', function() {
+            const length = this.value.length;
+            charCounter.textContent = `${length} / 1000 characters`;
+            
+            if (length > 900) {
+                charCounter.style.color = '#ea4335';
+            } else if (length > 800) {
+                charCounter.style.color = '#fbbc04';
+            } else {
                 charCounter.style.color = '#b1bfc5';
             }
-
-            // Character counter for message field
-            messageField.addEventListener('input', function() {
-                const length = this.value.length;
-                charCounter.textContent = `${length} / 1000 characters`;
-                
-                if (length > 900) {
-                    charCounter.style.color = '#ea4335';
-                } else if (length > 800) {
-                    charCounter.style.color = '#fbbc04';
-                } else {
-                    charCounter.style.color = '#b1bfc5';
-                }
-            });
-
-            // Form field focus effects
-            document.querySelectorAll('.contact-form input, .contact-form textarea, .contact-form select').forEach(field => {
-                field.addEventListener('focus', function() {
-                    this.style.transform = 'translateY(-1px)';
-                    this.style.boxShadow = '0 0 15px rgba(68, 227, 224, 0.4)';
-                });
-                
-                field.addEventListener('blur', function() {
-                    this.style.transform = 'translateY(0)';
-                    this.style.boxShadow = '0 0 10px rgba(68, 227, 224, 0.3)';
-                });
-            });
-
-            // Form submission handler
-            contactForm.addEventListener('submit', function(e) {
-                // Hide all messages first
-                successMsg.style.display = 'none';
-                errorMsg.style.display = 'none';
-                debugInfo.style.display = 'none';
-
-                // Get form values for validation
-                const formData = {
-                    name: document.getElementById('name').value.trim(),
-                    email: document.getElementById('email').value.trim(),
-                    phone: document.getElementById('phone').value.trim(),
-                    project: document.getElementById('project').value.trim(),
-                    budget: document.getElementById('budget').value.trim(),
-                    message: document.getElementById('message').value.trim()
-                };
-
-                // Client-side validation
-                if (!formData.name) {
-                    e.preventDefault();
-                    showMessage(errorMsg, '❌ Please enter your name.');
-                    return false;
-                }
-
-                if (!formData.email) {
-                    e.preventDefault();
-                    showMessage(errorMsg, '❌ Please enter your email address.');
-                    return false;
-                }
-
-                if (!isValidEmail(formData.email)) {
-                    e.preventDefault();
-                    showMessage(errorMsg, '❌ Please enter a valid email address.');
-                    return false;
-                }
-
-                if (!formData.message) {
-                    e.preventDefault();
-                    showMessage(errorMsg, '❌ Please enter your message.');
-                    return false;
-                }
-
-                if (formData.message.length < 10) {
-                    e.preventDefault();
-                    showMessage(errorMsg, '❌ Please provide a more detailed message (at least 10 characters).');
-                    return false;
-                }
-
-                // Add timestamp to form
-                const timestampInput = document.createElement('input');
-                timestampInput.type = 'hidden';
-                timestampInput.name = 'timestamp';
-                timestampInput.value = new Date().toISOString();
-                contactForm.appendChild(timestampInput);
-
-                // Set loading state
-                setLoadingState(true);
-
-                // Show debug info for the submission
-                showDebugInfo({
-                    status: 'submitting',
-                    timestamp: new Date().toISOString(),
-                    formData: formData,
-                    method: 'iframe_submission'
-                });
-
-                // Handle iframe load events
-                let formSubmitted = false;
-                
-                function handleSubmissionComplete() {
-                    if (!formSubmitted) {
-                        formSubmitted = true;
-                        setLoadingState(false);
-                        
-                        showMessage(successMsg, '✅ Thank you! Your message has been sent successfully. I\'ll get back to you within 24 hours.');
-                        resetForm();
-                        
-                        showDebugInfo({
-                            status: 'success',
-                            message: 'Form submitted successfully via iframe',
-                            timestamp: new Date().toISOString(),
-                            method: 'iframe_submission'
-                        });
-                    }
-                }
-
-                // Set up iframe event listeners
-                hiddenIframe.onload = handleSubmissionComplete;
-                
-                // Fallback timeout in case iframe doesn't load
-                setTimeout(() => {
-                    if (!formSubmitted) {
-                        handleSubmissionComplete();
-                    }
-                }, 3000);
-
-                // Let the form submit naturally to the iframe
-                return true;
-            });
-
-            // Alternative fetch method (backup)
-            window.submitViaFetch = async function() {
-                const formData = new FormData(contactForm);
-                
-                try {
-                    const response = await fetch(contactForm.action, {
-                        method: 'POST',
-                        body: formData,
-                        mode: 'no-cors' // This bypasses CORS but limits response access
-                    });
-                    
-                    showMessage(successMsg, '✅ Thank you! Your message has been sent successfully.');
-                    resetForm();
-                    
-                } catch (error) {
-                    showMessage(errorMsg, '❌ Error submitting form. Please try again.');
-                    console.error('Fetch error:', error);
-                }
-                
-                setLoadingState(false);
-            };
-
-            // Test connection function
-            window.testConnection = async function() {
-                const testUrl = contactForm.action;
-                try {
-                    const response = await fetch(testUrl + '?test=1', {
-                        method: 'GET',
-                        mode: 'cors'
-                    });
-                    const text = await response.text();
-                    
-                    showDebugInfo({
-                        test: 'connection_success',
-                        status: response.status,
-                        response: text.slice(0, 500),
-                        url: testUrl,
-                        timestamp: new Date().toISOString()
-                    });
-                } catch (error) {
-                    showDebugInfo({
-                        test: 'connection_failed',
-                        error: error.message,
-                        url: testUrl,
-                        timestamp: new Date().toISOString(),
-                        note: 'This may be normal due to CORS restrictions'
-                    });
-                }
-            };
-
-            // Initialize character counter
-            charCounter.textContent = '0 / 1000 characters';
         });
-    </script>
+
+        // Form field focus effects
+        document.querySelectorAll('.contact-form input, .contact-form textarea, .contact-form select').forEach(field => {
+            field.addEventListener('focus', function() {
+                this.style.transform = 'translateY(-1px)';
+                this.style.boxShadow = '0 0 15px rgba(68, 227, 224, 0.4)';
+            });
+            
+            field.addEventListener('blur', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '0 0 10px rgba(68, 227, 224, 0.3)';
+            });
+        });
+
+        // Form submission handler
+        contactForm.addEventListener('submit', function(e) {
+            // Hide all messages first
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+            debugInfo.style.display = 'none';
+
+            // Get form values for validation
+            const formData = {
+                name: document.getElementById('name').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                project: document.getElementById('project').value.trim(),
+                budget: document.getElementById('budget').value.trim(),
+                message: document.getElementById('message').value.trim()
+            };
+
+            // Client-side validation
+            if (!formData.name) {
+                e.preventDefault();
+                showMessage(errorMsg, '❌ Please enter your name.');
+                return false;
+            }
+
+            if (!formData.email) {
+                e.preventDefault();
+                showMessage(errorMsg, '❌ Please enter your email address.');
+                return false;
+            }
+
+            if (!isValidEmail(formData.email)) {
+                e.preventDefault();
+                showMessage(errorMsg, '❌ Please enter a valid email address.');
+                return false;
+            }
+
+            if (!formData.message) {
+                e.preventDefault();
+                showMessage(errorMsg, '❌ Please enter your message.');
+                return false;
+            }
+
+            if (formData.message.length < 10) {
+                e.preventDefault();
+                showMessage(errorMsg, '❌ Please provide a more detailed message (at least 10 characters).');
+                return false;
+            }
+
+            // Add timestamp to form
+            const timestampInput = document.createElement('input');
+            timestampInput.type = 'hidden';
+            timestampInput.name = 'timestamp';
+            timestampInput.value = new Date().toISOString();
+            contactForm.appendChild(timestampInput);
+
+            // Set loading state
+            setLoadingState(true);
+
+            // Handle iframe load events
+            let formSubmitted = false;
+            
+            function handleSubmissionComplete() {
+                if (!formSubmitted) {
+                    formSubmitted = true;
+                    setLoadingState(false);
+                    
+                    showMessage(successMsg, '✅ Thank you! Your message has been sent successfully. I\'ll get back to you within 24 hours.');
+                    resetForm();
+                }
+            }
+
+            // Set up iframe event listeners
+            hiddenIframe.onload = handleSubmissionComplete;
+            
+            // Fallback timeout in case iframe doesn't load
+            setTimeout(() => {
+                if (!formSubmitted) {
+                    handleSubmissionComplete();
+                }
+            }, 3000);
+
+            // Let the form submit naturally to the iframe
+            return true;
+        });
+
+        // Alternative fetch method (backup)
+        window.submitViaFetch = async function() {
+            const formData = new FormData(contactForm);
+            
+            try {
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'no-cors' // This bypasses CORS but limits response access
+                });
+                
+                showMessage(successMsg, '✅ Thank you! Your message has been sent successfully.');
+                resetForm();
+                
+            } catch (error) {
+                showMessage(errorMsg, '❌ Error submitting form. Please try again.');
+                console.error('Fetch error:', error);
+            }
+            
+            setLoadingState(false);
+        };
+
+        // Test connection function
+        window.testConnection = async function() {
+            const testUrl = contactForm.action;
+            try {
+                const response = await fetch(testUrl + '?test=1', {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                const text = await response.text();
+                
+            } catch (error) {
+                console.error('Connection test failed:', error);
+            }
+        };
+
+        // Initialize character counter
+        charCounter.textContent = '0 / 1000 characters';
+    });
+</script>
+
 </body>
 </html>
