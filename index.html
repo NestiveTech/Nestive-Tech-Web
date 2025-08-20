@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechCraft Studio - Premium Web Development Services</title>
+    <title>Nestive TechCraft  Studio - Premium Web Development Services</title>
     <style>
         * {
             margin: 0;
@@ -624,7 +624,7 @@
     <section id="home" class="section">
         <div class="container">
             <div class="hero-content">
-                <h1>Nestive Tech Studio</h1>
+                <h1>Nestive TechCraft  Studio</h1>
                 <p class="hero-subtitle">Crafting Digital Excellence Through Innovation</p>
                 <p>Transform your ideas into powerful digital solutions with our premium web development services. We specialize in creating stunning, high-performance websites and applications that drive results.</p>
                 <a href="#contact" class="cta-button">Start Your Project</a>
@@ -652,7 +652,7 @@
 
     <section id="about" class="section">
         <div class="container">
-            <h2>About TechCraft Studio</h2>
+            <h2>About Nestive TechCraft  Studio</h2>
             <div class="about-content">
                 <div class="about-text">
                     <p>We are passionate about creating digital experiences that make a difference. Our team combines fresh perspectives with modern technical skills to deliver innovative solutions that exceed expectations.</p>
@@ -1025,7 +1025,7 @@
 
                     <div class="form-group">
                         <label for="message">Project Details *</label>
-                        <textarea id="message" name="message" rows="6" maxlength="1500" required 
+                        <textarea id="message" name="message" rows="10" maxlength="10000" required 
                                   placeholder="Please describe your project requirements, goals, target audience, and any specific features you need..."></textarea>
                         <div id="charCounter" class="char-counter">0 / 1500 characters</div>
                     </div>
@@ -1103,11 +1103,11 @@
 
             function updateCharCount() {
                 const count = messageTextarea.value.length;
-                charCounter.textContent = count + ' / 1500 characters';
+                charCounter.textContent = count + ' / 10000 characters';
                 
-                if (count > 1400) {
+                if (count > 8000) {
                     charCounter.style.color = '#e74c3c';
-                } else if (count > 1200) {
+                } else if (count > 9000) {
                     charCounter.style.color = '#f39c12';
                 } else {
                     charCounter.style.color = '#b1bfc5';
@@ -1305,11 +1305,11 @@
         // Character counter for message field
         messageField.addEventListener('input', function() {
             const length = this.value.length;
-            charCounter.textContent = `${length} / 1000 characters`;
+            charCounter.textContent = `${length} / 10000 characters`;
             
-            if (length > 900) {
+            if (length > 9000) {
                 charCounter.style.color = '#ea4335';
-            } else if (length > 800) {
+            } else if (length > 8000) {
                 charCounter.style.color = '#fbbc04';
             } else {
                 charCounter.style.color = '#b1bfc5';
@@ -1452,7 +1452,7 @@
         };
 
         // Initialize character counter
-        charCounter.textContent = '0 / 1000 characters';
+        charCounter.textContent = '0 / 10000 characters';
     });
 </script>
 
