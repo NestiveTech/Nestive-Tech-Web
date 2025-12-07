@@ -39,7 +39,7 @@ THEMES = {
             ("shield", "Enterprise Security"),
             ("star", "Professional Branding"),
             # ("star", "Freelancer company"),
-            ("star", "24/7 Support Available"),
+            # ("star", "24/7 Support Available"),
         ]
     },
     

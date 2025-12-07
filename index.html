@@ -423,7 +423,6 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             line-height: 1.6;
             color: var(--text-primary);
-            /* background-image: url('./image.png'); */
             background-size: 100vh 100vh;
             background-position: center center;
             background-repeat: no-repeat;
@@ -590,7 +589,6 @@
             cursor: pointer;
             order: 1;
             flex-shrink: 0;
-            /* Remove margin-left and position it at true left */
             margin-left: 0;
             justify-self: flex-start;
         }
@@ -673,7 +671,6 @@
             justify-content: right;
             flex: 2;
             order: 3;
-            /* Center the nav links properly */
             margin-left: auto;
             margin-right: auto;
         }
@@ -1156,202 +1153,196 @@
             color: var(--text-secondary);
         }
 
-        /* Service Cards with enhanced visibility */
-        /* ================================
-   Services-only CSS (scoped)
-   ================================ */
+        /* Services-only CSS (scoped) */
+        #services {
+          scroll-margin-top: 90px;
+        }
 
-/* Section base */
-#services {
-  scroll-margin-top: 90px;
-}
+        /* Intro text spacing inside services */
+        #services h2 + p {
+          max-width: 900px;
+          margin: 0.5rem auto 2.5rem;
+          color: var(--text-secondary);
+        }
 
-/* Intro text spacing inside services */
-#services h2 + p {
-  max-width: 900px;
-  margin: 0.5rem auto 2.5rem;
-  color: var(--text-secondary);
-}
+        /* Outer grid that contains pricing-table wrapper */
+        #services .services-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 2.5rem;
+          margin-top: 2rem;
+        }
 
-/* Outer grid that contains pricing-table wrapper */
-#services .services-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2.5rem;
-  margin-top: 2rem;
-}
+        /* Pricing table becomes a responsive grid of cards */
+        #services .pricing-table {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+          gap: 2rem;
+          align-items: stretch;
+        }
 
-/* Pricing table becomes a responsive grid of cards */
-#services .pricing-table {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 2rem;
-  align-items: stretch;
-}
+        /* Card base */
+        #services .service-card {
+          position: relative;
+          overflow: hidden;
+          padding: 2.5rem 2rem;
+          background: var(--bg-secondary);
+          border: 1px solid var(--glass-border);
+          border-radius: 28px;
+          box-shadow: var(--shadow-xl);
+          transition:
+            transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+            box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+            border-color 0.4s ease;
+        }
 
-/* Card base */
-#services .service-card {
-  position: relative;
-  overflow: hidden;
-  padding: 2.5rem 2rem;
-  background: var(--bg-secondary);
-  border: 1px solid var(--glass-border);
-  border-radius: 28px;
-  box-shadow: var(--shadow-xl);
-  transition:
-    transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    border-color 0.4s ease;
-}
+        /* Decorative top bar animation */
+        #services .service-card::after {
+          content: '';
+          position: absolute;
+          inset: 0 auto auto 0;
+          height: 6px;
+          width: 100%;
+          background: linear-gradient(90deg, var(--primary-emerald), var(--primary-amber));
+          transform: scaleX(0);
+          transform-origin: left;
+          transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-/* Decorative top bar animation */
-#services .service-card::after {
-  content: '';
-  position: absolute;
-  inset: 0 auto auto 0;
-  height: 6px;
-  width: 100%;
-  background: linear-gradient(90deg, var(--primary-emerald), var(--primary-amber));
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
+        /* Subtle trisul watermark */
+        #services .service-card::before {
+          content: '🔱';
+          position: absolute;
+          top: 14px;
+          right: 16px;
+          font-size: 1.25rem;
+          opacity: 0.12;
+          color: var(--sacred-bronze);
+          pointer-events: none;
+        }
 
-/* Subtle trisul watermark */
-#services .service-card::before {
-  content: '🔱';
-  position: absolute;
-  top: 14px;
-  right: 16px;
-  font-size: 1.25rem;
-  opacity: 0.12;
-  color: var(--sacred-bronze);
-  pointer-events: none;
-}
+        /* Hover/active effect */
+        #services .service-card:hover,
+        #services .service-card:focus-within {
+          transform: translateY(-12px) scale(1.01);
+          border-color: var(--sacred-bronze);
+          box-shadow: var(--shadow-xl);
+        }
 
-/* Hover/active effect */
-#services .service-card:hover,
-#services .service-card:focus-within {
-  transform: translateY(-12px) scale(1.01);
-  border-color: var(--sacred-bronze);
-  box-shadow: var(--shadow-xl);
-}
+        #services .service-card:hover::after,
+        #services .service-card:focus-within::after {
+          transform: scaleX(1);
+        }
 
-#services .service-card:hover::after,
-#services .service-card:focus-within::after {
-  transform: scaleX(1);
-}
+        /* Headings inside card */
+        #services .service-card h3 {
+          margin: 0 0 1rem 0;
+          color: var(--text-card);
+          font-size: 1.4rem;
+          font-weight: 700;
+          transition: color 0.3s ease, transform 0.3s ease;
+        }
 
-/* Headings inside card */
-#services .service-card h3 {
-  margin: 0 0 1rem 0;
-  color: var(--text-card);
-  font-size: 1.4rem;
-  font-weight: 700;
-  transition: color 0.3s ease, transform 0.3s ease;
-}
+        #services .service-card:hover h3,
+        #services .service-card:focus-within h3 {
+          color: var(--primary-emerald);
+          transform: translateY(-2px);
+        }
 
-#services .service-card:hover h3,
-#services .service-card:focus-within h3 {
-  color: var(--primary-emerald);
-  transform: translateY(-2px);
-}
+        /* Feature list reset */
+        #services .service-card ul {
+          margin: 0.5rem 0 0 0;
+          padding: 0;
+          list-style: none;
+        }
 
-/* Feature list reset */
-#services .service-card ul {
-  margin: 0.5rem 0 0 0;
-  padding: 0;
-  list-style: none;
-}
+        /* Feature list items */
+        #services .service-card li {
+          position: relative;
+          margin: 0.75rem 0;
+          padding-left: 1.75rem;
+          color: var(--text-secondary);
+          line-height: 1.6;
+        }
 
-/* Feature list items */
-#services .service-card li {
-  position: relative;
-  margin: 0.75rem 0;
-  padding-left: 1.75rem;
-  color: var(--text-secondary);
-  line-height: 1.6;
-}
+        /* Custom bullet */
+        #services .service-card li::before {
+          content: '✔';
+          position: absolute;
+          left: 0;
+          top: 0.15rem;
+          font-size: 1rem;
+          color: var(--primary-emerald);
+          filter: drop-shadow(0 0 6px rgba(46, 204, 113, 0.45));
+        }
 
-/* Custom bullet */
-#services .service-card li::before {
-  content: '✔';
-  position: absolute;
-  left: 0;
-  top: 0.15rem;
-  font-size: 1rem;
-  color: var(--primary-emerald);
-  filter: drop-shadow(0 0 6px rgba(46, 204, 113, 0.45));
-}
+        /* Emphasis for tier labels and prices */
+        #services .service-card li strong {
+          color: var(--text-card);
+          font-weight: 800;
+        }
 
-/* Emphasis for tier labels and prices */
-#services .service-card li strong {
-  color: var(--text-card);
-  font-weight: 800;
-}
+        /* Optional inline price badge, in case a span.service-price is used */
+        #services .service-price {
+          display: inline-block;
+          margin-top: 1rem;
+          padding: 0.8rem 1.4rem;
+          border-radius: 999px;
+          font-weight: 700;
+          letter-spacing: 0.3px;
+          background: linear-gradient(135deg, var(--primary-emerald), var(--primary-amber));
+          color: #fff;
+          box-shadow: 0 10px 30px rgba(46, 204, 113, 0.3);
+        }
 
-/* Optional inline price badge, in case a span.service-price is used */
-#services .service-price {
-  display: inline-block;
-  margin-top: 1rem;
-  padding: 0.8rem 1.4rem;
-  border-radius: 999px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  background: linear-gradient(135deg, var(--primary-emerald), var(--primary-amber));
-  color: #fff;
-  box-shadow: 0 10px 30px rgba(46, 204, 113, 0.3);
-}
+        /* Focus visibility for accessibility */
+        #services .service-card:focus-within {
+          outline: 3px solid var(--primary-emerald);
+          outline-offset: 3px;
+        }
 
-/* Focus visibility for accessibility */
-#services .service-card:focus-within {
-  outline: 3px solid var(--primary-emerald);
-  outline-offset: 3px;
-}
+        /* Reduced motion preference */
+        @media (prefers-reduced-motion: reduce) {
+          #services .service-card,
+          #services .service-card::after,
+          #services .service-card h3 {
+            transition: none !important;
+          }
+          #services .service-card:hover,
+          #services .service-card:focus-within {
+            transform: none;
+          }
+        }
 
-/* Reduced motion preference */
-@media (prefers-reduced-motion: reduce) {
-  #services .service-card,
-  #services .service-card::after,
-  #services .service-card h3 {
-    transition: none !important;
-  }
-  #services .service-card:hover,
-  #services .service-card:focus-within {
-    transform: none;
-  }
-}
+        /* Responsive tweaks */
+        @media (max-width: 1024px) {
+          #services .pricing-table {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          }
+        }
 
-/* Responsive tweaks */
-@media (max-width: 1024px) {
-  #services .pricing-table {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  }
-}
+        @media (max-width: 768px) {
+          #services .pricing-table {
+            grid-template-columns: 1fr;
+          }
+          #services .service-card {
+            padding: 2rem 1.75rem;
+            border-radius: 24px;
+          }
+          #services .service-card h3 {
+            font-size: 1.3rem;
+          }
+        }
 
-@media (max-width: 768px) {
-  #services .pricing-table {
-    grid-template-columns: 1fr;
-  }
-  #services .service-card {
-    padding: 2rem 1.75rem;
-    border-radius: 24px;
-  }
-  #services .service-card h3 {
-    font-size: 1.3rem;
-  }
-}
-
-@media (max-width: 480px) {
-  #services .service-card {
-    padding: 1.5rem 1.25rem;
-    border-radius: 20px;
-  }
-  #services .service-card li {
-    margin: 0.6rem 0;
-  }
-}
-
+        @media (max-width: 480px) {
+          #services .service-card {
+            padding: 1.5rem 1.25rem;
+            border-radius: 20px;
+          }
+          #services .service-card li {
+            margin: 0.6rem 0;
+          }
+        }
 
         /* About Section */
         .about-content {
@@ -1688,6 +1679,34 @@
             border: none;
         }
 
+        /* Visitor Counter Styles */
+        .visitor-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--primary-emerald), var(--primary-amber));
+            color: white;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .visitor-counter:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .visitor-counter .counter-icon {
+            margin-right: 8px;
+            font-size: 1.1rem;
+        }
+
         /* Pause animation on reduced motion preference */
         @media (prefers-reduced-motion: reduce) {
             .rotating-logo {
@@ -1718,6 +1737,13 @@
         }
 
         @media (max-width: 768px) {
+            .visitor-counter {
+                bottom: 15px;
+                right: 15px;
+                padding: 10px 16px;
+                font-size: 0.8rem;
+            }
+
             .greeting-line {
                 font-size: clamp(1.8rem, 4vw, 2.8rem);
             }
@@ -1739,13 +1765,11 @@
             .nav-container {
                 gap: 1rem;
                 padding: 0 1rem;
-                /* Ensure proper alignment on mobile */
                 justify-content: space-between;
             }
 
             .nav-logo {
                 gap: 8px;
-                /* Keep logo at true left on mobile */
                 margin-left: 0;
             }
             
@@ -1971,6 +1995,12 @@
         </div>
     </div>
 
+    <!-- Visitor Counter -->
+    <div class="visitor-counter" id="visitorCounter" style="display: none;">
+        <span class="counter-icon">👁️</span>
+        <span id="visitorCount">Loading...</span> visitors
+    </div>
+
     <!-- Main Content (Initially Hidden) -->
     <div class="main-content" id="mainContent">
         <!-- Background Trisul Elements -->
@@ -2074,10 +2104,10 @@
                             <span class="stat-number">Fast</span>
                             <span class="stat-label">Project Delivery</span>
                         </div>
-                        <div class="stat-item">
+                        <!-- <div class="stat-item">
                             <span class="stat-number">24/7</span>
                             <span class="stat-label">Support Available</span>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -2095,8 +2125,8 @@
         <div class="service-card">
           <h3>🌐 Website Development</h3>
           <ul>
-            <li><strong>Basic (₹15,000 – ₹25,000)</strong>: 1-5 pages website, mobile responsive, free SSL</li>
-            <li><strong>Standard (₹30,000 – ₹55,000)</strong>: 5-10 pages, SEO, domain + hosting + SSL</li>
+            <li><strong>Basic (₹5,000 – ₹15,000)</strong>very basic static site or simple informational/portfolio site</li>
+            <li><strong>Standard (₹20,000 – ₹40,000)</strong>: 5-10 pages, SEO, domain + hosting + SSL</li>
           </ul>
         </div>
 
@@ -2122,7 +2152,6 @@
     </div>
   </div>
 </section>
-
 
         <section id="contact" class="section">
             <div class="container">
@@ -2159,109 +2188,108 @@
                             <label for="phone">Phone Number *</label>
                             <div class="phone-container">
                                 <select id="countryCode" name="countryCode" class="country-code-select">
-                                <!-- <select name="country_code" id="country_code"> -->
-                                    <option value="+1">🇺🇸 United States (+1)</option>
-                                    <option value="+93">🇦🇫 Afghanistan (+93)</option>
-                                    <option value="+355">🇦🇱 Albania (+355)</option>
-                                    <option value="+213">🇩🇿 Algeria (+213)</option>
-                                    <option value="+376">🇦🇩 Andorra (+376)</option>
-                                    <option value="+244">🇦🇴 Angola (+244)</option>
-                                    <option value="+54">🇦🇷 Argentina (+54)</option>
-                                    <option value="+374">🇦🇲 Armenia (+374)</option>
-                                    <option value="+61">🇦🇺 Australia (+61)</option>
-                                    <option value="+43">🇦🇹 Austria (+43)</option>
-                                    <option value="+994">🇦🇿 Azerbaijan (+994)</option>
-                                    <option value="+973">🇧🇭 Bahrain (+973)</option>
-                                    <option value="+880">🇧🇩 Bangladesh (+880)</option>
-                                    <option value="+32">🇧🇪 Belgium (+32)</option>
-                                    <option value="+229">🇧🇯 Benin (+229)</option>
-                                    <option value="+975">🇧🇹 Bhutan (+975)</option>
-                                    <option value="+591">🇧🇴 Bolivia (+591)</option>
-                                    <option value="+387">🇧🇦 Bosnia & Herzegovina (+387)</option>
-                                    <option value="+267">🇧🇼 Botswana (+267)</option>
-                                    <option value="+55">🇧🇷 Brazil (+55)</option>
-                                    <option value="+359">🇧🇬 Bulgaria (+359)</option>
-                                    <option value="+855">🇰🇭 Cambodia (+855)</option>
-                                    <option value="+237">🇨🇲 Cameroon (+237)</option>
-                                    <option value="+1">🇨🇦 Canada (+1)</option>
-                                    <option value="+56">🇨🇱 Chile (+56)</option>
-                                    <option value="+86">🇨🇳 China (+86)</option>
-                                    <option value="+57">🇨🇴 Colombia (+57)</option>
-                                    <option value="+506">🇨🇷 Costa Rica (+506)</option>
-                                    <option value="+385">🇭🇷 Croatia (+385)</option>
-                                    <option value="+53">🇨🇺 Cuba (+53)</option>
-                                    <option value="+357">🇨🇾 Cyprus (+357)</option>
-                                    <option value="+420">🇨🇿 Czech Republic (+420)</option>
-                                    <option value="+45">🇩🇰 Denmark (+45)</option>
-                                    <option value="+20">🇪🇬 Egypt (+20)</option>
-                                    <option value="+372">🇪🇪 Estonia (+372)</option>
-                                    <option value="+251">🇪🇹 Ethiopia (+251)</option>
-                                    <option value="+679">🇫🇯 Fiji (+679)</option>
-                                    <option value="+358">🇫🇮 Finland (+358)</option>
-                                    <option value="+33">🇫🇷 France (+33)</option>
-                                    <option value="+49">🇩🇪 Germany (+49)</option>
-                                    <option value="+30">🇬🇷 Greece (+30)</option>
-                                    <option value="+852">🇭🇰 Hong Kong (+852)</option>
-                                    <option value="+36">🇭🇺 Hungary (+36)</option>
-                                    <option value="+354">🇮🇸 Iceland (+354)</option>
-                                    <option value="+91" selected>🇮🇳 India (+91)</option>
-                                    <option value="+62">🇮🇩 Indonesia (+62)</option>
-                                    <option value="+98">🇮🇷 Iran (+98)</option>
-                                    <option value="+964">🇮🇶 Iraq (+964)</option>
-                                    <option value="+353">🇮🇪 Ireland (+353)</option>
-                                    <option value="+972">🇮🇱 Israel (+972)</option>
-                                    <option value="+39">🇮🇹 Italy (+39)</option>
-                                    <option value="+81">🇯🇵 Japan (+81)</option>
-                                    <option value="+962">🇯🇴 Jordan (+962)</option>
-                                    <option value="+254">🇰🇪 Kenya (+254)</option>
-                                    <option value="+82">🇰🇷 South Korea (+82)</option>
-                                    <option value="+965">🇰🇼 Kuwait (+965)</option>
-                                    <option value="+856">🇱🇦 Laos (+856)</option>
-                                    <option value="+371">🇱🇻 Latvia (+371)</option>
-                                    <option value="+961">🇱🇧 Lebanon (+961)</option>
-                                    <option value="+218">🇱🇾 Libya (+218)</option>
-                                    <option value="+370">🇱🇹 Lithuania (+370)</option>
-                                    <option value="+352">🇱🇺 Luxembourg (+352)</option>
-                                    <option value="+60">🇲🇾 Malaysia (+60)</option>
-                                    <option value="+960">🇲🇻 Maldives (+960)</option>
-                                    <option value="+356">🇲🇹 Malta (+356)</option>
-                                    <option value="+230">🇲🇺 Mauritius (+230)</option>
-                                    <option value="+52">🇲🇽 Mexico (+52)</option>
-                                    <option value="+212">🇲🇦 Morocco (+212)</option>
-                                    <option value="+977">🇳🇵 Nepal (+977)</option>
-                                    <option value="+31">🇳🇱 Netherlands (+31)</option>
-                                    <option value="+64">🇳🇿 New Zealand (+64)</option>
-                                    <option value="+234">🇳🇬 Nigeria (+234)</option>
-                                    <option value="+47">🇳🇴 Norway (+47)</option>
-                                    <option value="+92">🇵🇰 Pakistan (+92)</option>
-                                    <option value="+970">🇵🇸 Palestine (+970)</option>
-                                    <option value="+507">🇵🇦 Panama (+507)</option>
-                                    <option value="+51">🇵🇪 Peru (+51)</option>
-                                    <option value="+63">🇵🇭 Philippines (+63)</option>
-                                    <option value="+48">🇵🇱 Poland (+48)</option>
-                                    <option value="+351">🇵🇹 Portugal (+351)</option>
-                                    <option value="+974">🇶🇦 Qatar (+974)</option>
-                                    <option value="+7">🇷🇺 Russia (+7)</option>
-                                    <option value="+966">🇸🇦 Saudi Arabia (+966)</option>
-                                    <option value="+65">🇸🇬 Singapore (+65)</option>
-                                    <option value="+27">🇿🇦 South Africa (+27)</option>
-                                    <option value="+34">🇪🇸 Spain (+34)</option>
-                                    <option value="+94">🇱🇰 Sri Lanka (+94)</option>
-                                    <option value="+46">🇸🇪 Sweden (+46)</option>
-                                    <option value="+41">🇨🇭 Switzerland (+41)</option>
-                                    <option value="+963">🇸🇾 Syria (+963)</option>
-                                    <option value="+886">🇹🇼 Taiwan (+886)</option>
-                                    <option value="+66">🇹🇭 Thailand (+66)</option>
-                                    <option value="+90">🇹🇷 Turkey (+90)</option>
-                                    <option value="+380">🇺🇦 Ukraine (+380)</option>
-                                    <option value="+971">🇦🇪 United Arab Emirates (+971)</option>
-                                    <option value="+44">🇬🇧 United Kingdom (+44)</option>
-                                    <option value="+598">🇺🇾 Uruguay (+598)</option>
-                                    <option value="+998">🇺🇿 Uzbekistan (+998)</option>
-                                    <option value="+58">🇻🇪 Venezuela (+58)</option>
-                                    <option value="+84">🇻🇳 Vietnam (+84)</option>
-                                    <option value="+967">🇾🇪 Yemen (+967)</option>
-                                    <option value="+263">🇿🇼 Zimbabwe (+263)</option>
+                                <option value="+1">🇺🇸 United States (+1)</option>
+                                <option value="+93">🇦🇫 Afghanistan (+93)</option>
+                                <option value="+355">🇦🇱 Albania (+355)</option>
+                                <option value="+213">🇩🇿 Algeria (+213)</option>
+                                <option value="+376">🇦🇩 Andorra (+376)</option>
+                                <option value="+244">🇦🇴 Angola (+244)</option>
+                                <option value="+54">🇦🇷 Argentina (+54)</option>
+                                <option value="+374">🇦🇲 Armenia (+374)</option>
+                                <option value="+61">🇦🇺 Australia (+61)</option>
+                                <option value="+43">🇦🇹 Austria (+43)</option>
+                                <option value="+994">🇦🇿 Azerbaijan (+994)</option>
+                                <option value="+973">🇧🇭 Bahrain (+973)</option>
+                                <option value="+880">🇧🇩 Bangladesh (+880)</option>
+                                <option value="+32">🇧🇪 Belgium (+32)</option>
+                                <option value="+229">🇧🇯 Benin (+229)</option>
+                                <option value="+975">🇧🇹 Bhutan (+975)</option>
+                                <option value="+591">🇧🇴 Bolivia (+591)</option>
+                                <option value="+387">🇧🇦 Bosnia & Herzegovina (+387)</option>
+                                <option value="+267">🇧🇼 Botswana (+267)</option>
+                                <option value="+55">🇧🇷 Brazil (+55)</option>
+                                <option value="+359">🇧🇬 Bulgaria (+359)</option>
+                                <option value="+855">🇰🇭 Cambodia (+855)</option>
+                                <option value="+237">🇨🇲 Cameroon (+237)</option>
+                                <option value="+1">🇨🇦 Canada (+1)</option>
+                                <option value="+56">🇨🇱 Chile (+56)</option>
+                                <option value="+86">🇨🇳 China (+86)</option>
+                                <option value="+57">🇨🇴 Colombia (+57)</option>
+                                <option value="+506">🇨🇷 Costa Rica (+506)</option>
+                                <option value="+385">🇭🇷 Croatia (+385)</option>
+                                <option value="+53">🇨🇺 Cuba (+53)</option>
+                                <option value="+357">🇨🇾 Cyprus (+357)</option>
+                                <option value="+420">🇨🇿 Czech Republic (+420)</option>
+                                <option value="+45">🇩🇰 Denmark (+45)</option>
+                                <option value="+20">🇪🇬 Egypt (+20)</option>
+                                <option value="+372">🇪🇪 Estonia (+372)</option>
+                                <option value="+251">🇪🇹 Ethiopia (+251)</option>
+                                <option value="+679">🇫🇯 Fiji (+679)</option>
+                                <option value="+358">🇫🇮 Finland (+358)</option>
+                                <option value="+33">🇫🇷 France (+33)</option>
+                                <option value="+49">🇩🇪 Germany (+49)</option>
+                                <option value="+30">🇬🇷 Greece (+30)</option>
+                                <option value="+852">🇭🇰 Hong Kong (+852)</option>
+                                <option value="+36">🇭🇺 Hungary (+36)</option>
+                                <option value="+354">🇮🇸 Iceland (+354)</option>
+                                <option value="+91" selected>🇮🇳 India (+91)</option>
+                                <option value="+62">🇮🇩 Indonesia (+62)</option>
+                                <option value="+98">🇮🇷 Iran (+98)</option>
+                                <option value="+964">🇮🇶 Iraq (+964)</option>
+                                <option value="+353">🇮🇪 Ireland (+353)</option>
+                                <option value="+972">🇮🇱 Israel (+972)</option>
+                                <option value="+39">🇮🇹 Italy (+39)</option>
+                                <option value="+81">🇯🇵 Japan (+81)</option>
+                                <option value="+962">🇯🇴 Jordan (+962)</option>
+                                <option value="+254">🇰🇪 Kenya (+254)</option>
+                                <option value="+82">🇰🇷 South Korea (+82)</option>
+                                <option value="+965">🇰🇼 Kuwait (+965)</option>
+                                <option value="+856">🇱🇦 Laos (+856)</option>
+                                <option value="+371">🇱🇻 Latvia (+371)</option>
+                                <option value="+961">🇱🇧 Lebanon (+961)</option>
+                                <option value="+218">🇱🇾 Libya (+218)</option>
+                                <option value="+370">🇱🇹 Lithuania (+370)</option>
+                                <option value="+352">🇱🇺 Luxembourg (+352)</option>
+                                <option value="+60">🇲🇾 Malaysia (+60)</option>
+                                <option value="+960">🇲🇻 Maldives (+960)</option>
+                                <option value="+356">🇲🇹 Malta (+356)</option>
+                                <option value="+230">🇲🇺 Mauritius (+230)</option>
+                                <option value="+52">🇲🇽 Mexico (+52)</option>
+                                <option value="+212">🇲🇦 Morocco (+212)</option>
+                                <option value="+977">🇳🇵 Nepal (+977)</option>
+                                <option value="+31">🇳🇱 Netherlands (+31)</option>
+                                <option value="+64">🇳🇿 New Zealand (+64)</option>
+                                <option value="+234">🇳🇬 Nigeria (+234)</option>
+                                <option value="+47">🇳🇴 Norway (+47)</option>
+                                <option value="+92">🇵🇰 Pakistan (+92)</option>
+                                <option value="+970">🇵🇸 Palestine (+970)</option>
+                                <option value="+507">🇵🇦 Panama (+507)</option>
+                                <option value="+51">🇵🇪 Peru (+51)</option>
+                                <option value="+63">🇵🇭 Philippines (+63)</option>
+                                <option value="+48">🇵🇱 Poland (+48)</option>
+                                <option value="+351">🇵🇹 Portugal (+351)</option>
+                                <option value="+974">🇶🇦 Qatar (+974)</option>
+                                <option value="+7">🇷🇺 Russia (+7)</option>
+                                <option value="+966">🇸🇦 Saudi Arabia (+966)</option>
+                                <option value="+65">🇸🇬 Singapore (+65)</option>
+                                <option value="+27">🇿🇦 South Africa (+27)</option>
+                                <option value="+34">🇪🇸 Spain (+34)</option>
+                                <option value="+94">🇱🇰 Sri Lanka (+94)</option>
+                                <option value="+46">🇸🇪 Sweden (+46)</option>
+                                <option value="+41">🇨🇭 Switzerland (+41)</option>
+                                <option value="+963">🇸🇾 Syria (+963)</option>
+                                <option value="+886">🇹🇼 Taiwan (+886)</option>
+                                <option value="+66">🇹🇭 Thailand (+66)</option>
+                                <option value="+90">🇹🇷 Turkey (+90)</option>
+                                <option value="+380">🇺🇦 Ukraine (+380)</option>
+                                <option value="+971">🇦🇪 United Arab Emirates (+971)</option>
+                                <option value="+44">🇬🇧 United Kingdom (+44)</option>
+                                <option value="+598">🇺🇾 Uruguay (+598)</option>
+                                <option value="+998">🇺🇿 Uzbekistan (+998)</option>
+                                <option value="+58">🇻🇪 Venezuela (+58)</option>
+                                <option value="+84">🇻🇳 Vietnam (+84)</option>
+                                <option value="+967">🇾🇪 Yemen (+967)</option>
+                                <option value="+263">🇿🇼 Zimbabwe (+263)</option>
                                 </select>
                                 <input type="tel" id="phone" name="phone" class="phone-input" placeholder="Enter phone number" required>
                             </div>
@@ -2274,13 +2302,6 @@
                                 <option value="Website Development">Website Development</option>
                                 <option value="Lightweight Software (PC)">Lightweight Software (PC)</option>
                                 <option value="Logo Design">Logo Design</option>
-                                <!-- <option value="ecommerce">E-commerce</option>
-                                <option value="webapp">Web Application</option>
-                                <option value="mobile">Mobile App</option>
-                                <option value="cloud">Cloud Solutions</option>
-                                <option value="maintenance">Maintenance & Support</option>
-                                <option value="consultation">Consultation</option>
-                                <option value="other">Other</option> -->
                             </select>
                         </div>
 
@@ -2290,13 +2311,6 @@
                                 <option value="">Select budget range</option>
                                 <option value="Basic">Basic</option>
                                 <option value="Standard">Standard</option>
-                                <!-- <option value="under 5K">Under ₹5,000</option>
-                                <option value="5K-10K">₹5,000 - ₹10,000</option> -->
-                                <!-- <option value="10K-20K">₹10,000 - ₹20,000</option>
-                                <option value="20K-30K">₹20,000 - ₹30,000</option>
-                                <option value="30K-40K">₹30,000 - ₹40,000</option>
-                                <option value="over-50K">Over ₹50,000</option>
-                                <option value="Discuss">Let's Discuss</option> -->
                             </select>
                         </div>
 
@@ -2522,7 +2536,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // 🚀 **FIXED FORM SUBMISSION HANDLER** 🚀
+    // FIXED FORM SUBMISSION HANDLER (iframe-based success-first approach)
     contactForm.addEventListener('submit', function(e) {
         successMsg.style.display = 'none';
         errorMsg.style.display = 'none';
@@ -2580,7 +2594,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Merge phone number with country code
+        // Merge phone with country code
         const localPhone = formData.phone.replace(/^0+/, '');
         const fullPhoneNumber = formData.countryCode + localPhone;
         
@@ -2594,7 +2608,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         mergedPhoneInput.value = fullPhoneNumber;
 
-        // Add timestamp
+        // Timestamp
         let timestampInput = document.getElementById('timestampInput');
         if (!timestampInput) {
             timestampInput = document.createElement('input');
@@ -2605,22 +2619,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         timestampInput.value = new Date().toISOString();
 
-        // Set loading state
+        // Loading
         setLoadingState(true);
 
-        // 🔥 **COMPLETELY FIXED SUCCESS/ERROR HANDLING** 🔥
+        // Completion handler
         let completed = false;
         let successTimer = null;
 
         function complete(success) {
             if (completed) return;
             completed = true;
-            
-            // Clear any timers
             if (successTimer) clearTimeout(successTimer);
-            
             setLoadingState(false);
-            
             if (success) {
                 showMessage(successMsg, "✅ Thank you! Your message has been sent successfully. We'll get back to you within 24 hours.");
                 resetForm();
@@ -2629,47 +2639,33 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // 🎯 **IMPROVED IFRAME SUCCESS DETECTION** 🎯
+        // Iframe load detection with success-first assumption
         function handleIframeLoad() {
-            // Give iframe time to load completely
             setTimeout(() => {
                 try {
                     const doc = hiddenIframe.contentDocument || hiddenIframe.contentWindow.document;
                     const text = doc.body ? doc.body.textContent || doc.body.innerText || '' : '';
-                    
-                    console.log('Iframe content:', text); // Debug log
-                    
-                    // Check for success indicators
                     if (text.includes('success') || text.includes('true') || text.includes('submitted') || text.length > 50) {
                         complete(true);
                     } else {
-                        // If no clear success, assume success anyway since form was submitted
                         complete(true);
                     }
                 } catch (e) {
-                    console.log('Iframe access blocked (cross-origin), assuming success:', e);
-                    // Cross-origin restriction means form was submitted - assume success
                     complete(true);
                 }
-            }, 1000); // Wait 1 second for iframe to fully load
+            }, 1000);
         }
-
-        // Set up iframe handler
         hiddenIframe.onload = handleIframeLoad;
 
-        // 🛡️ **SUCCESS-FIRST TIMEOUT** - Shows SUCCESS by default 🛡️
+        // Fallback timeout to show success
         successTimer = setTimeout(() => {
-            if (!completed) {
-                console.log('Timeout reached, showing success (data likely submitted successfully)');
-                complete(true); // Default to SUCCESS after timeout since backend usually works
-            }
-        }, 8000); // 8 second timeout, defaults to success
+            if (!completed) complete(true);
+        }, 8000);
 
-        // Allow form to submit naturally to the iframe
-        console.log('Form submission started...');
+        // Allow natural submit to iframe
     });
 
-    // Phone input formatting
+    // Phone input numeric formatting
     const phoneInput = document.getElementById('phone');
     phoneInput.addEventListener('input', function(e) {
         let value = e.target.value.replace(/\D/g, '');
@@ -2679,8 +2675,57 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize character counter
     charCounter.textContent = '0 / 10000 characters';
-});
-</script>
 
+    // ============================
+    // Visitor Counter (client hook)
+    // ============================
+
+    // Set to true only if a visible counter widget should be shown
+    const SHOW_VISITOR_COUNTER = false; // keeps UI hidden while still saving count server-side
+    const visitorCounterElement = document.getElementById('visitorCounter');
+    const visitorCountElement = document.getElementById('visitorCount');
+
+    function maybeShowCounter(count) {
+        if (!SHOW_VISITOR_COUNTER) return;
+        visitorCountElement.textContent = Number(count || 0).toLocaleString();
+        visitorCounterElement.style.display = 'block';
+    }
+
+    async function apiCall(action, method = 'GET') {
+        const url = 'https://script.google.com/macros/s/AKfycby5YooFlJE-YRVxyW86x2m6gi3_tPew4egmALR-OIFOJKgKyGQisT-S9Wt8xbzSfBeafw/exec?action=' + encodeURIComponent(action);
+        const opts = method === 'POST'
+            ? { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'action=' + encodeURIComponent(action) }
+            : { method: 'GET' };
+        const res = await fetch(url, opts);
+        return res.json();
+    }
+
+    // Count only once per session and per day
+    function isUniqueSessionVisit() {
+        const key = 'nestive_visit_' + new Date().toDateString();
+        if (!sessionStorage.getItem(key)) {
+            sessionStorage.setItem(key, '1');
+            return true;
+        }
+        return false;
+    }
+
+    // After loading overlay finishes, increment or fetch count
+    setTimeout(async () => {
+        try {
+            if (isUniqueSessionVisit()) {
+                const r = await apiCall('incrementVisitor', 'POST');
+                if (r && r.success) maybeShowCounter(r.visitorCount);
+            } else {
+                const r = await apiCall('getVisitorCount', 'GET');
+                if (r && r.success) maybeShowCounter(r.visitorCount);
+            }
+        } catch (err) {
+            // Silently ignore; backend still stores when reachable
+            console.warn('Visitor counter error:', err);
+        }
+    }, 10000);
+});
+    </script>
 </body>
 </html>
